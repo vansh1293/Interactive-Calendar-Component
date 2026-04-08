@@ -1,26 +1,75 @@
+@import "../styles/tokens.css";
+@import "../styles/animations.css";
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ============================================================
+   TAILWIND v4 — Custom font family tokens
+   Our components use CSS variables directly: bg-[color:var(--color-*)]
+   Tailwind is used for layout, spacing, and structural utilities.
+   ============================================================ */
+
+@theme {
+  --font-family-sans:    'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-family-display: 'Playfair Display', ui-serif, Georgia, serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ============================================================
+   BASE STYLES
+   ============================================================ */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-family: var(--font-family-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: #000;   /* fallback while image loads */
+  color: var(--color-text-primary);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Keyboard-only focus ring (hidden for mouse users) */
+:focus-visible {
+  outline: 2px solid var(--color-border-focus);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Screen reader only utility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: var(--color-bg-page); }
+::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+
+/* Selection highlight */
+::selection {
+  background: var(--color-primary-light);
+  color: var(--color-text-primary);
+}
+
+/* Font variable bridge for next/font */
+html {
+  --font-sans:    var(--font-outfit, 'Outfit', sans-serif);
+  --font-display: var(--font-playfair, 'Playfair Display', serif);
+}
+
+/* Ensure Playfair Display applies where font-display is used */
+.font-display {
+  font-family: var(--font-display) !important;
 }
