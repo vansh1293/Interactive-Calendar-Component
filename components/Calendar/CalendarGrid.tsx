@@ -22,11 +22,11 @@ const CalendarGrid = memo(function CalendarGrid() {
   const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`
 
   return (
-    <div className="flex flex-col gap-1.5 px-6 pb-6 pt-3 min-h-[460px]">
+    <div className="flex flex-col gap-1 px-5 pb-3.5 pt-1.5">
       {/* Day headers */}
       <div
         role="row"
-        className="grid grid-cols-7 mb-1"
+        className="grid grid-cols-7 mb-0.5"
         aria-label="Days of the week"
       >
         {DAYS_OF_WEEK.map((day, i) => (
@@ -35,7 +35,7 @@ const CalendarGrid = memo(function CalendarGrid() {
             role="columnheader"
             aria-label={day}
             className={`
-              text-center text-[11px] font-semibold tracking-widest uppercase py-1
+              text-center text-[10px] font-semibold tracking-widest uppercase py-1
               ${i >= 5 ? 'text-[color:var(--color-weekend)]' : 'text-[color:var(--color-text-muted)]'}
             `}
           >
@@ -44,7 +44,7 @@ const CalendarGrid = memo(function CalendarGrid() {
         ))}
       </div>
 
-      {/* Date grid - Using popLayout for stability */}
+      {/* Date grid - Always stable height */}
       <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={monthKey}
@@ -59,10 +59,11 @@ const CalendarGrid = memo(function CalendarGrid() {
             damping: 35,
             opacity: { duration: 0.3 }
           }}
-          className="flex flex-col gap-1.5 w-full"
+          className="flex flex-col gap-1 w-full"
+          style={{ minHeight: '318px' }} // Exactly 6 rows at new unit
         >
           {grid.map((week, wi) => (
-            <div key={wi} role="row" className="grid grid-cols-7 gap-1.5">
+            <div key={wi} role="row" className="grid grid-cols-7 gap-1 h-[52px]">
               {week.map((date) => {
                 const selState = getSelectionState({
                   date, today, selectionStart, selectionEnd, hoverDate, currentMonth,
@@ -84,6 +85,16 @@ const CalendarGrid = memo(function CalendarGrid() {
                   />
                 )
               })}
+            </div>
+          ))}
+
+          {/* 
+            Vertical Stability Guard: 
+            Always renders enough empty rows to reach a total of 6.
+          */}
+          {Array.from({ length: 6 - grid.length }).map((_, i) => (
+            <div key={`spacer-${i}`} className="grid grid-cols-7 gap-1 h-[52px] opacity-0 pointer-events-none" aria-hidden="true">
+              <div className="w-full h-full" />
             </div>
           ))}
         </motion.div>

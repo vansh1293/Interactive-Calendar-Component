@@ -9,19 +9,19 @@ export default function Home() {
       <BackgroundScene />
 
       <main
-        className="relative min-h-screen flex flex-col items-center justify-start py-10 px-4 sm:px-6"
+        className="relative min-h-screen flex flex-col items-center justify-center px-6 py-16 md:py-24 sm:px-12 overflow-hidden"
         style={{ zIndex: 1 }}
       >
         {/* Page header */}
-        <header className="w-full max-w-[1330px] mb-8">
+        <header className="w-full max-w-[940px] mb-5 -mt-16 md:-mt-20">
           <p
-            className="text-xs font-semibold tracking-[0.25em] uppercase mb-1"
+            className="text-[10px] sm:text-[11px] font-semibold tracking-[0.25em] uppercase mb-1"
             style={{ color: 'var(--color-text-muted)' }}
           >
             Interactive Component
           </p>
           <h1
-            className="text-3xl sm:text-4xl font-bold"
+            className="text-2xl sm:text-3xl font-bold"
             style={{
               fontFamily: 'var(--font-playfair, "Playfair Display", serif)',
               color: 'var(--color-text-primary)',

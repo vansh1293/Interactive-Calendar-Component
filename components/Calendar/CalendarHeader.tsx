@@ -11,8 +11,17 @@ import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ClimateAlert from '@/components/UI/ClimateAlert'
 
 const CalendarHeader = memo(function CalendarHeader() {
-  const { state, goNextMonth, goPrevMonth, goToToday } = useCalendarContext()
+  const { state, goNextMonth, goPrevMonth, goToToday, togglePicker, setMonth, setYear } = useCalendarContext()
   const { currentMonth, today } = state
+
+  React.useEffect(() => {
+    if (state.activePicker === 'year') {
+      const activeEl = document.getElementById('active-year-selection')
+      if (activeEl) {
+        activeEl.scrollIntoView({ block: 'center', behavior: 'smooth' })
+      }
+    }
+  }, [state.activePicker])
 
   const monthIndex = currentMonth.getMonth()
   const imageSrc = MONTH_IMAGES[monthIndex]
@@ -28,7 +37,7 @@ const CalendarHeader = memo(function CalendarHeader() {
   const prevSrc = MONTH_IMAGES[prevMonthIdx]
 
   return (
-    <div className="relative overflow-hidden rounded-t-[24px]" style={{ height: '286px' }}>
+    <div className="relative overflow-hidden rounded-t-[24px]" style={{ height: '254px' }}>
       {/* ── Hero image with true crossfade ─────────────────── */}
       <AnimatePresence mode="sync" initial={false}>
         <motion.div
@@ -73,49 +82,123 @@ const CalendarHeader = memo(function CalendarHeader() {
       </div>
 
       {/* ── Dynamic Climate/Weather Alert ──────────────────── */}
-      <div className="absolute top-14 right-6 z-20">
+      <div className="absolute top-10 right-5 z-20">
         <ClimateAlert month={monthIndex} />
       </div>
 
-      <div className="absolute bottom-4 left-5 z-10">
+      <div className="absolute bottom-5 left-6 z-20">
+        <div key={`header-nav-${monthKey}`} className="flex items-center gap-3 relative h-10">
 
-        <AnimatePresence mode="wait" initial={false}>
-          <motion.div
-            key={`label-${monthKey}`}
-            initial={{ opacity: 0, x: -10 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 10 }}
-            transition={{ duration: 0.25 }}
-          >
-            <p className="text-white/70 text-sm font-semibold tracking-[0.2em] uppercase">
-              {formatYear(currentMonth)}
-            </p>
-            <h2
-              className="text-white font-display text-5xl font-bold leading-tight"
-              style={{ fontFamily: 'var(--font-playfair)' }}
-            >
-              {formatMonthName(currentMonth)}
-            </h2>
-            {/* Environment mood badge */}
-            <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/20">
-              <span className="text-[10px]">
-                {env.particle === 'fog' ? '🌫️' :
-                  env.particle === 'sparkles' ? '✨' :
-                    env.particle === 'blossom' ? '🌸' :
-                      env.particle === 'dust' ? '🌪️' :
-                        env.particle === 'stormLeaves' ? '🌬️' :
-                          env.particle === 'rain' ? '🌧️' : '·'}
-              </span>
-              <span className="text-[10px] font-semibold text-white tracking-wider">
-                {env.mood}
-              </span>
+          {/* Month Range Selector */}
+          <div className="relative group cursor-pointer" onClick={() => togglePicker(state.activePicker === 'month' ? null : 'month')}>
+            <div className={`flex items-center gap-2 bg-black/20 backdrop-blur-md rounded-xl px-2.5 py-1.5 border border-white/10 hover:bg-white/20 transition-all ${state.activePicker === 'month' ? 'ring-1 ring-white/30 bg-white/10' : ''}`}>
+              <h2
+                className="text-white font-serif text-2xl sm:text-3xl font-bold leading-none select-none"
+                style={{ fontFamily: 'var(--font-playfair)' }}
+              >
+                {formatMonthName(currentMonth)}
+              </h2>
+              <ChevronLeft size={14} className={`text-white/40 transition-transform duration-300 ${state.activePicker === 'month' ? 'rotate-90' : '-rotate-90'}`} />
             </div>
+
+            {/* Month Dropdown Menu */}
+            <AnimatePresence>
+              {state.activePicker === 'month' && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute bottom-full left-0 mb-3 w-56 bg-black/60 shadow-2xl backdrop-blur-2xl rounded-2xl border border-white/20 p-2 grid grid-cols-3 gap-1 z-50 text-white"
+                >
+                  {Array.from({ length: 12 }, (_, i) => i).map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setMonth(m)}
+                      className={`
+                        px-1.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all
+                        ${currentMonth.getMonth() === m
+                          ? 'bg-[color:var(--color-primary)] text-white'
+                          : 'text-white/70 hover:bg-white/10'}
+                      `}
+                    >
+                      {new Date(2000, m, 1).toLocaleString('default', { month: 'short' })}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          <div className="w-[1px] h-6 bg-white/10" />
+
+          {/* Year Range Selector */}
+          <div className="relative group cursor-pointer" onClick={() => togglePicker(state.activePicker === 'year' ? null : 'year')}>
+            <div className={`flex items-center gap-2 bg-black/20 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/10 hover:bg-white/20 transition-all ${state.activePicker === 'year' ? 'ring-1 ring-white/30 bg-white/10' : ''}`}>
+              <span className="text-white/70 text-[12px] sm:text-[13px] font-bold tracking-[0.2em] uppercase transition-colors group-hover:text-white select-none">
+                {formatYear(currentMonth)}
+              </span>
+              <ChevronLeft size={12} className={`text-white/40 transition-transform duration-300 ${state.activePicker === 'year' ? 'rotate-90' : '-rotate-90'}`} />
+            </div>
+
+            {/* Year Dropdown Menu */}
+            <AnimatePresence>
+              {state.activePicker === 'year' && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95, y: 10 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 10 }}
+                  onClick={(e) => e.stopPropagation()}
+                  className="
+                    absolute bottom-full left-0 mb-3 w-32 
+                    bg-black/60 shadow-2xl backdrop-blur-2xl rounded-2xl border border-white/20 
+                    p-1.5 flex flex-col gap-0.5 z-50 text-white
+                    max-h-[190px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20
+                  "
+                >
+                  {Array.from({ length: 51 }, (_, i) => 2000 + i).map((y) => (
+                    <button
+                      key={y}
+                      id={state.activePicker === 'year' && currentMonth.getFullYear() === y ? 'active-year-selection' : undefined}
+                      onClick={() => setYear(y)}
+                      className={`
+                        w-full px-3 py-2 rounded-lg text-xs font-bold transition-all shrink-0
+                        ${currentMonth.getFullYear() === y
+                          ? 'bg-[color:var(--color-primary)] text-white shadow-lg'
+                          : 'text-white/60 hover:bg-white/10 hover:text-white'}
+                      `}
+                    >
+                      {y}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Environment mood badge */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="hidden lg:inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/10 backdrop-blur-md border border-white/10"
+          >
+            <span className="text-[10px]">
+              {env.particle === 'fog' ? '🌫️' :
+                env.particle === 'sparkles' ? '✨' :
+                  env.particle === 'blossom' ? '🌸' :
+                    env.particle === 'dust' ? '🌪️' :
+                      env.particle === 'stormLeaves' ? '🌬️' :
+                        env.particle === 'rain' ? '🌧️' : '·'}
+            </span>
+            <span className="text-[9px] font-bold text-white/50 tracking-[0.15em] uppercase">
+              {env.mood}
+            </span>
           </motion.div>
-        </AnimatePresence>
+        </div>
       </div>
 
       {/* ── Navigation controls ────────────────────────────── */}
-      <div className="absolute bottom-4 right-4 z-10 flex items-center gap-2">
+      <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5">
         {!isCurrentMonth && (
           <motion.button
             initial={{ opacity: 0, scale: 0.8 }}
@@ -127,39 +210,30 @@ const CalendarHeader = memo(function CalendarHeader() {
             className="
               p-1.5 rounded-full bg-white/20 backdrop-blur-sm
               text-white hover:bg-white/35 transition-colors duration-150
-              focus-visible:ring-2 focus-visible:ring-white
             "
           >
-            <RotateCcw size={14} strokeWidth={2.5} />
+            <RotateCcw size={12} strokeWidth={2.5} />
           </motion.button>
         )}
 
         <button
           onClick={goPrevMonth}
-          aria-label="Previous month"
-          className="
-            p-2 rounded-full bg-white/20 backdrop-blur-sm
-            text-white hover:bg-white/35 active:scale-95
-            transition-all duration-150 focus-visible:ring-2 focus-visible:ring-white
-          "
+          className="p-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/35 active:scale-95 transition-all"
         >
-          <ChevronLeft size={18} strokeWidth={2.5} />
+          <ChevronLeft size={16} strokeWidth={2.5} />
         </button>
 
         <button
           onClick={goNextMonth}
-          aria-label="Next month"
-          className="
-            p-2 rounded-full bg-white/20 backdrop-blur-sm
-            text-white hover:bg-white/35 active:scale-95
-            transition-all duration-150 focus-visible:ring-2 focus-visible:ring-white
-          "
+          className="p-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/35 active:scale-95 transition-all"
         >
-          <ChevronRight size={18} strokeWidth={2.5} />
+          <ChevronRight size={16} strokeWidth={2.5} />
         </button>
       </div>
     </div>
   )
 })
+
+CalendarHeader.displayName = 'CalendarHeader'
 
 export default CalendarHeader

@@ -22,6 +22,10 @@ interface CalendarContextValue {
   toggleFocus: () => void
   toggleYearView: () => void
   setViewMode: (mode: CalendarState['viewMode']) => void
+  togglePicker: (type: 'month' | 'year' | null) => void
+  goToMonthYear: (month: number, year: number) => void
+  setMonth: (month: number) => void
+  setYear: (year: number) => void
 }
 
 const CalendarContext = createContext<CalendarContextValue | null>(null)
@@ -86,6 +90,7 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
     viewMode: 'single',
     focusMode: false,
     showYearView: false,
+    activePicker: null,
   })
 
   // ── Notes & Events State ─────────────────────────────────────────────────
@@ -111,7 +116,7 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
     } else {
       setNotes(rawNotes || { monthMemos: {}, dateNotes: [] })
     }
-    
+
     setEvents(storage.events.get())
   }, [])
 
@@ -191,13 +196,13 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
   const onDragStart = useCallback((date: Date) => {
     setState(s => {
       const isAlreadySelected = s.selectionStart && isSameDay(s.selectionStart, date) && !s.selectionEnd
-      return { 
-        ...s, 
-        selectionStart: date, 
-        selectionEnd: null, 
-        selectionPhase: isAlreadySelected ? 'toggling' : 'selecting', 
-        isDragging: true, 
-        hoverDate: date 
+      return {
+        ...s,
+        selectionStart: date,
+        selectionEnd: null,
+        selectionPhase: isAlreadySelected ? 'toggling' : 'selecting',
+        isDragging: true,
+        hoverDate: date
       }
     })
   }, [])
@@ -213,11 +218,11 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
       if (!end || !s.selectionStart) return { ...s, isDragging: false, selectionPhase: 'idle' }
       const [start, finalEnd] = end < s.selectionStart ? [end, s.selectionStart] : [s.selectionStart, end]
       const isPoint = isSameDay(start, finalEnd)
-      
+
       // If we were toggling, we keep that phase so onDateClick can catch it.
       // Otherwise, keep 'selecting' if it was a point so onDateClick can finalize it to 'idle'.
       const nextPhase = s.selectionPhase === 'toggling' ? 'toggling' : (isPoint ? 'selecting' : 'idle')
-      
+
       return { ...s, selectionStart: start, selectionEnd: finalEnd, hoverDate: null, isDragging: false, selectionPhase: nextPhase }
     })
   }, [])
@@ -253,10 +258,10 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
   const setDateNote = useCallback((id: string | null, content: string, start: string, end?: string) => {
     setNotes(prev => {
       let nextDateNotes = [...prev.dateNotes]
-      
+
       if (id) {
         // Update existing
-        nextDateNotes = nextDateNotes.map(n => 
+        nextDateNotes = nextDateNotes.map(n =>
           n.id === id ? { ...n, content, updatedAt: Date.now(), startDate: start as DateString, endDate: end as DateString } : n
         )
       } else {
@@ -309,18 +314,47 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
     setEvents(prev => { const next = prev.map(e => e.id === id ? { ...e, ...updates } : e); storage.events.set(next); return next })
   }, [])
 
+  const togglePicker = useCallback((type: 'month' | 'year' | null) => {
+    setState(s => ({ ...s, activePicker: type }))
+  }, [])
+
+  const goToMonthYear = useCallback((month: number, year: number) => {
+    setState(s => ({
+      ...s,
+      currentMonth: new Date(year, month, 1),
+      activePicker: null
+    }))
+  }, [])
+
+  const setMonth = useCallback((month: number) => {
+    setState(s => ({
+      ...s,
+      currentMonth: new Date(s.currentMonth.getFullYear(), month, 1),
+      activePicker: null
+    }))
+  }, [])
+
+  const setYear = useCallback((year: number) => {
+    setState(s => ({
+      ...s,
+      currentMonth: new Date(year, s.currentMonth.getMonth(), 1),
+      activePicker: null
+    }))
+  }, [])
+
   return (
     <CalendarContext.Provider value={{
       state, goNextMonth, goPrevMonth, goToToday, goToMonth,
       onDateClick, onDateHover, onDragStart, onDragEnter, onDragEnd,
       clearSelection, toggleFocus, toggleYearView, setViewMode,
+      togglePicker, goToMonthYear, setMonth, setYear,
     }}>
-      <NotesContext.Provider value={{ 
-        notes, 
+      <NotesContext.Provider value={{
+        notes,
         hoveredNoteId,
-        setMonthMemo, 
-        setDateNote, 
-        deleteMonthMemo, 
+        setMonthMemo,
+        setDateNote,
+        deleteMonthMemo,
         deleteDateNote,
         setHoveredNoteId
       }}>

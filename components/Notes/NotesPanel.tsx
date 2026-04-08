@@ -24,26 +24,26 @@ const NoteCard = memo(function NoteCard({
       animate={{ opacity: 1, x: 0 }}
       onMouseEnter={() => onHover(true)}
       onMouseLeave={() => onHover(false)}
-      className="flex flex-col gap-2 p-4 rounded-2xl bg-[color:var(--color-bg-card)] border border-[color:var(--color-border)] shadow-sm hover:border-[color:var(--color-primary)] transition-colors group/card"
+      className="flex flex-col gap-1.5 p-3.5 rounded-2xl bg-[color:var(--color-bg-card)] border border-[color:var(--color-border)] shadow-sm hover:border-[color:var(--color-primary)] transition-colors group/card"
     >
-       <div className="flex items-center gap-2 mb-1">
+       <div className="flex items-center gap-1.5 mb-0.5">
           <div className="p-1 rounded bg-[color:var(--color-bg-cell-hover)]">
-            <Calendar size={10} className="text-[color:var(--color-primary)]" />
+            <Calendar size={9} className="text-[color:var(--color-primary)]" />
           </div>
-          <span className="text-[10px] font-extrabold uppercase tracking-widest text-[color:var(--color-text-muted)]">
+          <span className="text-[9px] font-extrabold uppercase tracking-widest text-[color:var(--color-text-muted)]">
             {rangeDays > 1 ? `${rangeDays}-Day Range` : 'Single Day'}
           </span>
           <button 
             onClick={onDelete}
             aria-label="Delete note"
-            className="ml-auto p-1.5 rounded-lg hover:bg-red-50 text-[color:var(--color-text-muted)] hover:text-red-500 transition-colors opacity-0 group-hover/card:opacity-100"
+            className="ml-auto p-1 rounded-lg hover:bg-red-50 text-[color:var(--color-text-muted)] hover:text-red-500 transition-colors opacity-0 group-hover/card:opacity-100"
           >
-            <Trash2 size={12} />
+            <Trash2 size={11} />
           </button>
        </div>
        
        {rangeDays > 1 && (
-         <div className="text-[11px] font-bold text-[color:var(--color-text-secondary)] mb-1 px-1">
+         <div className="text-[10px] font-bold text-[color:var(--color-text-secondary)] mb-0.5 px-0.5">
             {formatFullDate(new Date(note.startDate))} → {formatFullDate(new Date(note.endDate!))}
          </div>
        )}
@@ -109,29 +109,29 @@ const NotesPanel = memo(function NotesPanel() {
   const textareaClass = `
     w-full resize-none rounded-xl border border-[color:var(--color-border)]
     bg-[color:var(--color-bg-card)] text-[color:var(--color-text-primary)]
-    placeholder:text-[color:var(--color-text-muted)] text-sm leading-relaxed
-    p-3 focus:outline-none focus:ring-2 focus:ring-[color:var(--color-border-focus)]
+    placeholder:text-[color:var(--color-text-muted)] text-[13px] leading-relaxed
+    p-2.5 focus:outline-none focus:ring-2 focus:ring-[color:var(--color-border-focus)]
     transition-shadow duration-150 shadow-[var(--shadow-notes)]
     scrollbar-thin
   `
 
   return (
-    <div className="notes-panel flex flex-col gap-6 h-full overflow-y-auto px-1 pb-8">
+    <div className="notes-panel flex flex-col gap-5 h-full overflow-y-auto px-1 pb-8">
 
       {/* ── Month Memo ───────────────────────────────────────── */}
-      <section aria-labelledby="month-memo-label" className="space-y-3">
-        <div className="flex items-center gap-2 mb-2 px-1">
-          <BookOpen size={14} className="text-[color:var(--color-primary)]" />
-          <h3 id="month-memo-label" className="text-xs font-bold tracking-widest uppercase text-[color:var(--color-text-secondary)]">
+      <section aria-labelledby="month-memo-label" className="space-y-2.5">
+        <div className="flex items-center gap-2 mb-1.5 px-0.5">
+          <BookOpen size={13} className="text-[color:var(--color-primary)]" />
+          <h3 id="month-memo-label" className="text-[11px] font-bold tracking-widest uppercase text-[color:var(--color-text-secondary)]">
             {formatMonthYear(currentMonth)} Memo
           </h3>
           {monthMemo && (
             <button
               onClick={() => deleteMonthMemo(monthKey)}
               aria-label="Clear month memo"
-              className="ml-auto p-1.5 rounded-lg hover:bg-red-50 text-[color:var(--color-text-muted)] hover:text-red-500 transition-colors"
+              className="ml-auto p-1 rounded-lg hover:bg-red-50 text-[color:var(--color-text-muted)] hover:text-red-500 transition-colors"
             >
-              <Trash2 size={12} />
+              <Trash2 size={11} />
             </button>
           )}
         </div>
@@ -145,7 +145,7 @@ const NotesPanel = memo(function NotesPanel() {
           aria-label={`Notes for ${formatMonthYear(currentMonth)}`}
           className={textareaClass}
         />
-        <p className="text-right text-[10px] font-medium text-[color:var(--color-text-muted)] mt-1 px-1">
+        <p className="text-right text-[9px] font-medium text-[color:var(--color-text-muted)] mt-1 px-1">
           {monthMemo.length}/{MAX_NOTE_LENGTH}
         </p>
       </section>
@@ -179,17 +179,17 @@ const NotesPanel = memo(function NotesPanel() {
 
             {/* Selection Header */}
             <div className="flex items-center justify-between px-1">
-               <div className="flex items-center gap-2">
-                 <Calendar size={14} className="text-[color:var(--color-secondary)]" />
-                 <h3 className="text-xs font-extrabold tracking-widest uppercase text-[color:var(--color-text-secondary)]">
+               <div className="flex items-center gap-1.5">
+                 <Calendar size={13} className="text-[color:var(--color-secondary)]" />
+                 <h3 className="text-[11px] font-extrabold tracking-widest uppercase text-[color:var(--color-text-secondary)]">
                    {activeNotes.length > 1 ? `Notes (${activeNotes.length})` : 'Day Notes'}
                  </h3>
                </div>
                <button 
                  onClick={handleAddNewNote}
-                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[color:var(--color-primary)] text-white hover:bg-[color:var(--color-primary-dark)] transition-all text-[10px] font-bold shadow-md active:scale-95"
+                 className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl bg-[color:var(--color-primary)] text-white hover:bg-[color:var(--color-primary-dark)] transition-all text-[9.5px] font-bold shadow-md active:scale-95"
                >
-                 <Plus size={12} />
+                 <Plus size={11} />
                  <span>ADD NEW</span>
                </button>
             </div>

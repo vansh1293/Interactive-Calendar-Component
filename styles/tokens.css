@@ -5,6 +5,13 @@
    ============================================================ */
 
 /* ── Shared base ─────────────────────────────────────────── */
+html,
+body {
+  max-width: 100vw;
+  overflow: hidden;
+  height: 100%;
+}
+
 :root {
   --radius-card: 20px;
   --radius-cell: 10px;
@@ -246,7 +253,7 @@
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Targeted High-Performance Transitions
+   Targeted High-Performance Transitions & Hardware Acceleration
 ───────────────────────────────────────────────────────────── */
 .calendar-card,
 .notes-panel,
@@ -256,4 +263,6 @@
     background-color 500ms ease,
     border-color 500ms ease,
     color 400ms ease;
+  will-change: transform, opacity;
+  backface-visibility: hidden;
 }

@@ -55,6 +55,7 @@ export interface CalendarState {
   viewMode: ViewMode
   focusMode: boolean
   showYearView: boolean
+  activePicker: 'month' | 'year' | null
 }
 
 // ============================================================

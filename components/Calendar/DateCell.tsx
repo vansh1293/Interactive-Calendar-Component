@@ -88,7 +88,7 @@ const DateCell = memo(function DateCell({
   // ── CSS classes ───────────────────────────────────────────────
   const cellBase = `
     relative flex flex-col items-center justify-start
-    min-h-[58px] w-full pt-1.5 pb-1 px-1 rounded-[12px]
+    min-h-[52px] w-full pt-1.5 pb-1 px-1 rounded-[10px]
     cursor-pointer select-none outline-none
     transition-all duration-150 ease-out
   `
@@ -104,8 +104,8 @@ const DateCell = memo(function DateCell({
   })()
 
   const numberBase = `
-    text-[15px] font-semibold leading-none mb-1
-    w-8 h-8 flex items-center justify-center rounded-full
+    text-[13.5px] font-semibold leading-none mb-0.5
+    w-7 h-7 flex items-center justify-center rounded-full
     transition-all duration-150
   `
 

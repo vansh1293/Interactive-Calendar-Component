@@ -15,7 +15,7 @@ const CalendarCard = memo(function CalendarCard() {
   const rangeDays = getRangeDayCount(selectionStart, selectionEnd)
 
   return (
-    <div className="relative w-full max-w-[1330px] mx-auto">
+    <div className="relative w-full max-w-[940px] mx-auto transition-all duration-300 transform">
 
       {/* ── Focus mode overlay ───────────────────────────────── */}
       <AnimatePresence>
@@ -29,7 +29,7 @@ const CalendarCard = memo(function CalendarCard() {
       </AnimatePresence>
 
       {/* ── Selection toolbar — only shows when a date is picked ── */}
-      <div className="h-9 mb-3 flex items-center">
+      <div className="h-8 mb-2.5 flex items-center">
         <AnimatePresence>
           {selectionStart && (
             <motion.div
@@ -40,13 +40,13 @@ const CalendarCard = memo(function CalendarCard() {
               transition={{ duration: 0.2 }}
               className="flex items-center"
             >
-              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border text-sm shadow-sm"
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-xs shadow-sm"
                 style={{
                   backgroundColor: 'var(--color-primary-light)',
                   borderColor: 'var(--color-border-focus)',
                 }}
               >
-                <span className="font-semibold text-xs" style={{ color: 'var(--color-primary)' }}>
+                <span className="font-semibold text-[11px]" style={{ color: 'var(--color-primary)' }}>
                   {rangeDays && rangeDays > 1
                     ? `${formatShortDate(selectionStart)} → ${selectionEnd ? formatShortDate(selectionEnd) : '…'} (${rangeDays} days)`
                     : formatShortDate(selectionStart)
@@ -59,7 +59,7 @@ const CalendarCard = memo(function CalendarCard() {
                   className="p-0.5 rounded hover:bg-white/20 transition-colors"
                   style={{ color: 'var(--color-primary)' }}
                 >
-                  <Focus size={12} />
+                  <Focus size={11} />
                 </button>
                 <button
                   onClick={clearSelection}
@@ -67,7 +67,7 @@ const CalendarCard = memo(function CalendarCard() {
                   className="p-0.5 rounded hover:bg-white/20 transition-colors"
                   style={{ color: 'var(--color-primary)' }}
                 >
-                  <X size={12} />
+                  <X size={11} />
                 </button>
               </div>
             </motion.div>
@@ -77,7 +77,7 @@ const CalendarCard = memo(function CalendarCard() {
 
       {/* ── Main card ─────────────────────────────────────────── */}
       <div
-        className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_390px] rounded-[24px] overflow-hidden"
+        className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_310px] rounded-[24px] overflow-hidden"
         style={{ boxShadow: 'var(--shadow-card)' }}
       >
         {/* Calendar */}
@@ -92,7 +92,7 @@ const CalendarCard = memo(function CalendarCard() {
 
         {/* Notes */}
         <aside
-          className="p-7 flex flex-col gap-4 min-h-[320px] lg:min-h-0 border-t lg:border-t-0 lg:border-l"
+          className="p-6 flex flex-col gap-3.5 min-h-[320px] lg:min-h-0 border-t lg:border-t-0 lg:border-l"
           style={{
             backgroundColor: 'var(--color-bg-notes)',
             borderColor: 'var(--color-border)',
