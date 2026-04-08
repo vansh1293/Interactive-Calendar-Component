@@ -8,42 +8,43 @@
 :root {
   --radius-card: 20px;
   --radius-cell: 10px;
-  --color-bg-page:           transparent;
-  --color-bg-card:           rgba(8, 12, 22, 0.72);
-  --color-bg-notes:          rgba(6, 9, 18, 0.80);
-  --color-bg-cell-hover:     rgba(255, 255, 255, 0.07);
-  --color-bg-in-range:       rgba(255, 255, 255, 0.05);
-  --color-primary-light:     rgba(255, 255, 255, 0.08);
-  --color-border:            rgba(255, 255, 255, 0.09);
-  --color-spiral:            rgba(255, 255, 255, 0.18);
-  --color-weekend:           #FF7B7B;
-  --color-holiday:           #FFD166;
-  --color-event-work:        var(--color-primary);
-  --color-event-personal:    #C084FC;
-  --color-event-other:       #34D399;
-  --shadow-card:    0 24px 60px rgba(0,0,0,0.55), 0 4px 16px rgba(0,0,0,0.35),
-                    inset 0 1px 0 rgba(255,255,255,0.07);
-  --shadow-cell:    0 2px 10px color-mix(in srgb, var(--color-primary) 30%, transparent);
-  --shadow-tooltip: 0 8px 24px rgba(0,0,0,0.6);
-  --shadow-notes:   inset 0 2px 8px rgba(0,0,0,0.25);
+  --color-bg-page: transparent;
+  --color-bg-card: rgba(8, 12, 22, 0.72);
+  --color-bg-notes: rgba(6, 9, 18, 0.80);
+  --color-bg-cell-hover: rgba(255, 255, 255, 0.07);
+  --color-bg-in-range: rgba(255, 255, 255, 0.05);
+  --color-primary-light: rgba(255, 255, 255, 0.08);
+  --color-border: rgba(255, 255, 255, 0.09);
+  --color-spiral: rgba(255, 255, 255, 0.18);
+  --color-weekend: #FF7B7B;
+  --color-holiday: #FFD166;
+  --color-event-work: var(--color-primary);
+  --color-event-personal: #C084FC;
+  --color-event-other: #34D399;
+  --shadow-card: 0 24px 60px rgba(0, 0, 0, 0.55), 0 4px 16px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  --shadow-cell: 0 2px 10px color-mix(in srgb, var(--color-primary) 30%, transparent);
+  --shadow-tooltip: 0 8px 24px rgba(0, 0, 0, 0.6);
+  --shadow-notes: inset 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* ─────────────────────────────────────────────────────────────
    MONTH 0 — JANUARY — Very cold, foggy mornings (5–15°C)
    Palette: icy blue-gray fog tones
 ───────────────────────────────────────────────────────────── */
-:root, [data-month="0"] {
-  --color-primary:           #94A3B8;
-  --color-primary-hover:     #CBD5E1;
-  --color-secondary:         #7DD3FC;
-  --color-bg-selected:       #94A3B8;
-  --color-text-primary:      #EFF6FF;
-  --color-text-secondary:    #94A3B8;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #070A10;
-  --color-border-focus:      #94A3B8;
-  --color-today-ring:        #7DD3FC;
-  --color-text-weekend:      #FCA5A5;
+:root,
+[data-month="0"] {
+  --color-primary: #94A3B8;
+  --color-primary-hover: #CBD5E1;
+  --color-secondary: #7DD3FC;
+  --color-bg-selected: #94A3B8;
+  --color-text-primary: #EFF6FF;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #070A10;
+  --color-border-focus: #94A3B8;
+  --color-today-ring: #7DD3FC;
+  --color-text-weekend: #FCA5A5;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -51,17 +52,17 @@
    Palette: warm peach-pink, inviting
 ───────────────────────────────────────────────────────────── */
 [data-month="1"] {
-  --color-primary:           #FB923C;
-  --color-primary-hover:     #FDBA74;
-  --color-secondary:         #F472B6;
-  --color-bg-selected:       #FB923C;
-  --color-text-primary:      #FFF7F0;
-  --color-text-secondary:    #F97316;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #1A0800;
-  --color-border-focus:      #FB923C;
-  --color-today-ring:        #F472B6;
-  --color-text-weekend:      #FCA5A5;
+  --color-primary: #FB923C;
+  --color-primary-hover: #FDBA74;
+  --color-secondary: #F472B6;
+  --color-bg-selected: #FB923C;
+  --color-text-primary: #FFF7F0;
+  --color-text-secondary: #F97316;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #1A0800;
+  --color-border-focus: #FB923C;
+  --color-today-ring: #F472B6;
+  --color-text-weekend: #FCA5A5;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -69,17 +70,17 @@
    Palette: warm green-yellow, lush
 ───────────────────────────────────────────────────────────── */
 [data-month="2"] {
-  --color-primary:           #86EFAC;
-  --color-primary-hover:     #BBF7D0;
-  --color-secondary:         #FCD34D;
-  --color-bg-selected:       #86EFAC;
-  --color-text-primary:      #F0FDF4;
-  --color-text-secondary:    #4ADE80;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #021408;
-  --color-border-focus:      #86EFAC;
-  --color-today-ring:        #FCD34D;
-  --color-text-weekend:      #6EE7B7;
+  --color-primary: #86EFAC;
+  --color-primary-hover: #BBF7D0;
+  --color-secondary: #FCD34D;
+  --color-bg-selected: #86EFAC;
+  --color-text-primary: #F0FDF4;
+  --color-text-secondary: #4ADE80;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #021408;
+  --color-border-focus: #86EFAC;
+  --color-today-ring: #FCD34D;
+  --color-text-weekend: #6EE7B7;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -87,17 +88,17 @@
    Palette: amber-orange, fiery
 ───────────────────────────────────────────────────────────── */
 [data-month="3"] {
-  --color-primary:           #FBBF24;
-  --color-primary-hover:     #FCD34D;
-  --color-secondary:         #F97316;
-  --color-bg-selected:       #FBBF24;
-  --color-text-primary:      #FFFBEB;
-  --color-text-secondary:    #D97706;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #180900;
-  --color-border-focus:      #FBBF24;
-  --color-today-ring:        #F97316;
-  --color-text-weekend:      #FCA5A5;
+  --color-primary: #FBBF24;
+  --color-primary-hover: #FCD34D;
+  --color-secondary: #F97316;
+  --color-bg-selected: #FBBF24;
+  --color-text-primary: #FFFBEB;
+  --color-text-secondary: #D97706;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #180900;
+  --color-border-focus: #FBBF24;
+  --color-today-ring: #F97316;
+  --color-text-weekend: #FCA5A5;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -105,17 +106,17 @@
    Palette: deep orange-red, scorching
 ───────────────────────────────────────────────────────────── */
 [data-month="4"] {
-  --color-primary:           #F97316;
-  --color-primary-hover:     #FB923C;
-  --color-secondary:         #EF4444;
-  --color-bg-selected:       #F97316;
-  --color-text-primary:      #FFF4ED;
-  --color-text-secondary:    #EA580C;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #180300;
-  --color-border-focus:      #F97316;
-  --color-today-ring:        #EF4444;
-  --color-text-weekend:      #FCA5A5;
+  --color-primary: #F97316;
+  --color-primary-hover: #FB923C;
+  --color-secondary: #EF4444;
+  --color-bg-selected: #F97316;
+  --color-text-primary: #FFF4ED;
+  --color-text-secondary: #EA580C;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #180300;
+  --color-border-focus: #F97316;
+  --color-today-ring: #EF4444;
+  --color-text-weekend: #FCA5A5;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -123,17 +124,17 @@
    Palette: sandy brown, stormy amber
 ───────────────────────────────────────────────────────────── */
 [data-month="5"] {
-  --color-primary:           #D97706;
-  --color-primary-hover:     #F59E0B;
-  --color-secondary:         #92400E;
-  --color-bg-selected:       #D97706;
-  --color-text-primary:      #FEF3C7;
-  --color-text-secondary:    #B45309;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #120600;
-  --color-border-focus:      #D97706;
-  --color-today-ring:        #92400E;
-  --color-text-weekend:      #FCA5A5;
+  --color-primary: #D97706;
+  --color-primary-hover: #F59E0B;
+  --color-secondary: #92400E;
+  --color-bg-selected: #D97706;
+  --color-text-primary: #FEF3C7;
+  --color-text-secondary: #B45309;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #120600;
+  --color-border-focus: #D97706;
+  --color-today-ring: #92400E;
+  --color-text-weekend: #FCA5A5;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -141,17 +142,17 @@
    Palette: deep blue-teal, stormy monsoon
 ───────────────────────────────────────────────────────────── */
 [data-month="6"] {
-  --color-primary:           #38BDF8;
-  --color-primary-hover:     #7DD3FC;
-  --color-secondary:         #6366F1;
-  --color-bg-selected:       #38BDF8;
-  --color-text-primary:      #F0F9FF;
-  --color-text-secondary:    #0EA5E9;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #020810;
-  --color-border-focus:      #38BDF8;
-  --color-today-ring:        #6366F1;
-  --color-text-weekend:      #A5B4FC;
+  --color-primary: #38BDF8;
+  --color-primary-hover: #7DD3FC;
+  --color-secondary: #6366F1;
+  --color-bg-selected: #38BDF8;
+  --color-text-primary: #F0F9FF;
+  --color-text-secondary: #0EA5E9;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #020810;
+  --color-border-focus: #38BDF8;
+  --color-today-ring: #6366F1;
+  --color-text-weekend: #A5B4FC;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -159,17 +160,17 @@
    Palette: dark teal-green, lush rain
 ───────────────────────────────────────────────────────────── */
 [data-month="7"] {
-  --color-primary:           #22D3EE;
-  --color-primary-hover:     #67E8F9;
-  --color-secondary:         #34D399;
-  --color-bg-selected:       #22D3EE;
-  --color-text-primary:      #ECFEFF;
-  --color-text-secondary:    #06B6D4;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #021418;
-  --color-border-focus:      #22D3EE;
-  --color-today-ring:        #34D399;
-  --color-text-weekend:      #6EE7B7;
+  --color-primary: #22D3EE;
+  --color-primary-hover: #67E8F9;
+  --color-secondary: #34D399;
+  --color-bg-selected: #22D3EE;
+  --color-text-primary: #ECFEFF;
+  --color-text-secondary: #06B6D4;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #021418;
+  --color-border-focus: #22D3EE;
+  --color-today-ring: #34D399;
+  --color-text-weekend: #6EE7B7;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -177,17 +178,17 @@
    Palette: fresh cyan-green, clearing skies
 ───────────────────────────────────────────────────────────── */
 [data-month="8"] {
-  --color-primary:           #4ADE80;
-  --color-primary-hover:     #86EFAC;
-  --color-secondary:         #22D3EE;
-  --color-bg-selected:       #4ADE80;
-  --color-text-primary:      #F0FFF4;
-  --color-text-secondary:    #16A34A;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #011A08;
-  --color-border-focus:      #4ADE80;
-  --color-today-ring:        #22D3EE;
-  --color-text-weekend:      #6EE7B7;
+  --color-primary: #4ADE80;
+  --color-primary-hover: #86EFAC;
+  --color-secondary: #22D3EE;
+  --color-bg-selected: #4ADE80;
+  --color-text-primary: #F0FFF4;
+  --color-text-secondary: #16A34A;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #011A08;
+  --color-border-focus: #4ADE80;
+  --color-today-ring: #22D3EE;
+  --color-text-weekend: #6EE7B7;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -195,17 +196,17 @@
    Palette: golden amber, warm pleasant
 ───────────────────────────────────────────────────────────── */
 [data-month="9"] {
-  --color-primary:           #FCD34D;
-  --color-primary-hover:     #FDE68A;
-  --color-secondary:         #FB923C;
-  --color-bg-selected:       #FCD34D;
-  --color-text-primary:      #FEFCE8;
-  --color-text-secondary:    #CA8A04;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #1A1000;
-  --color-border-focus:      #FCD34D;
-  --color-today-ring:        #FB923C;
-  --color-text-weekend:      #FCA5A5;
+  --color-primary: #FCD34D;
+  --color-primary-hover: #FDE68A;
+  --color-secondary: #FB923C;
+  --color-bg-selected: #FCD34D;
+  --color-text-primary: #FEFCE8;
+  --color-text-secondary: #CA8A04;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #1A1000;
+  --color-border-focus: #FCD34D;
+  --color-today-ring: #FB923C;
+  --color-text-weekend: #FCA5A5;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -213,17 +214,17 @@
    Palette: cool slate-blue, crisp air
 ───────────────────────────────────────────────────────────── */
 [data-month="10"] {
-  --color-primary:           #7DD3FC;
-  --color-primary-hover:     #BAE6FD;
-  --color-secondary:         #94A3B8;
-  --color-bg-selected:       #7DD3FC;
-  --color-text-primary:      #F0F9FF;
-  --color-text-secondary:    #38BDF8;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #021828;
-  --color-border-focus:      #7DD3FC;
-  --color-today-ring:        #94A3B8;
-  --color-text-weekend:      #FCA5A5;
+  --color-primary: #7DD3FC;
+  --color-primary-hover: #BAE6FD;
+  --color-secondary: #94A3B8;
+  --color-bg-selected: #7DD3FC;
+  --color-text-primary: #F0F9FF;
+  --color-text-secondary: #38BDF8;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #021828;
+  --color-border-focus: #7DD3FC;
+  --color-today-ring: #94A3B8;
+  --color-text-weekend: #FCA5A5;
 }
 
 /* ─────────────────────────────────────────────────────────────
@@ -231,26 +232,28 @@
    Palette: icy gray-blue, dense fog
 ───────────────────────────────────────────────────────────── */
 [data-month="11"] {
-  --color-primary:           #CBD5E1;
-  --color-primary-hover:     #E2E8F0;
-  --color-secondary:         #60A5FA;
-  --color-bg-selected:       #CBD5E1;
-  --color-text-primary:      #F8FAFC;
-  --color-text-secondary:    #94A3B8;
-  --color-text-muted:        rgba(255,255,255,0.65);
-  --color-text-on-accent:    #080C12;
-  --color-border-focus:      #CBD5E1;
-  --color-today-ring:        #60A5FA;
-  --color-text-weekend:      #FCA5A5;
+  --color-primary: #CBD5E1;
+  --color-primary-hover: #E2E8F0;
+  --color-secondary: #60A5FA;
+  --color-bg-selected: #CBD5E1;
+  --color-text-primary: #F8FAFC;
+  --color-text-secondary: #94A3B8;
+  --color-text-muted: rgba(255, 255, 255, 0.65);
+  --color-text-on-accent: #080C12;
+  --color-border-focus: #CBD5E1;
+  --color-today-ring: #60A5FA;
+  --color-text-weekend: #FCA5A5;
 }
 
 /* ─────────────────────────────────────────────────────────────
-   Smooth crossfade on month change
+   Targeted High-Performance Transitions
 ───────────────────────────────────────────────────────────── */
-*, *::before, *::after {
+.calendar-card,
+.notes-panel,
+.date-cell,
+[data-month] {
   transition:
     background-color 500ms ease,
     border-color 500ms ease,
-    color 300ms ease,
-    box-shadow 400ms ease;
+    color 400ms ease;
 }

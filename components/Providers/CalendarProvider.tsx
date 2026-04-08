@@ -1,8 +1,9 @@
 'use client'
 
 import React, { createContext, useContext, useCallback, useEffect, useRef, useState } from 'react'
-import type { CalendarState, NotesState, CalendarEvent, MonthKey, DateString } from '@/types'
+import type { CalendarState, NotesState, CalendarEvent, MonthKey, DateString, Note } from '@/types'
 import { storage } from '@/lib/storage'
+import { isSameDay } from '@/lib/dates'
 
 // ─── Calendar Context ─────────────────────────────────────────────────────────
 
@@ -35,10 +36,12 @@ export function useCalendarContext(): CalendarContextValue {
 
 interface NotesContextValue {
   notes: NotesState
+  hoveredNoteId: string | null
   setMonthMemo: (key: string, content: string) => void
-  setDateNote: (key: string, content: string) => void
+  setDateNote: (id: string | null, content: string, start: string, end?: string) => void
   deleteMonthMemo: (key: string) => void
-  deleteDateNote: (key: string) => void
+  deleteDateNote: (id: string) => void
+  setHoveredNoteId: (id: string | null) => void
 }
 
 const NotesContext = createContext<NotesContextValue | null>(null)
@@ -86,12 +89,29 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
   })
 
   // ── Notes & Events State ─────────────────────────────────────────────────
-  const [notes, setNotes] = useState<NotesState>({ monthMemos: {}, dateNotes: {} })
+  const [notes, setNotes] = useState<NotesState>({ monthMemos: {}, dateNotes: [] })
   const [events, setEvents] = useState<CalendarEvent[]>([])
+  const [hoveredNoteId, setHoveredNoteId] = useState<string | null>(null)
 
-  // ── Hydrate from localStorage ────────────────────────────────────────────
+  // ── Hydrate from localStorage with Migration ────────────────────────────
   useEffect(() => {
-    setNotes(storage.notes.get())
+    const rawNotes = storage.notes.get() as any
+    // Migration: If dateNotes is an object, convert to array
+    if (rawNotes && rawNotes.dateNotes && !Array.isArray(rawNotes.dateNotes)) {
+      const migrated: Note[] = Object.entries(rawNotes.dateNotes).map(([key, n]: [any, any]) => ({
+        id: crypto.randomUUID(),
+        content: n.content,
+        updatedAt: n.updatedAt || Date.now(),
+        startDate: key as DateString,
+        endDate: n.endDate as DateString
+      }))
+      const next = { ...rawNotes, dateNotes: migrated }
+      setNotes(next)
+      storage.notes.set(next)
+    } else {
+      setNotes(rawNotes || { monthMemos: {}, dateNotes: [] })
+    }
+    
     setEvents(storage.events.get())
   }, [])
 
@@ -149,6 +169,11 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
 
   const onDateClick = useCallback((date: Date) => {
     setState(s => {
+      // Toggle logic: If we detected a toggle intent during mousedown
+      if (s.selectionPhase === 'toggling' && s.selectionStart && isSameDay(s.selectionStart, date)) {
+        return { ...s, selectionStart: null, selectionEnd: null, selectionPhase: 'idle', hoverDate: null }
+      }
+
       if (s.selectionPhase === 'idle' || (s.selectionStart && s.selectionEnd)) {
         return { ...s, selectionStart: date, selectionEnd: null, selectionPhase: 'selecting', hoverDate: null }
       }
@@ -164,7 +189,17 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
   }, [])
 
   const onDragStart = useCallback((date: Date) => {
-    setState(s => ({ ...s, selectionStart: date, selectionEnd: null, selectionPhase: 'selecting', isDragging: true, hoverDate: date }))
+    setState(s => {
+      const isAlreadySelected = s.selectionStart && isSameDay(s.selectionStart, date) && !s.selectionEnd
+      return { 
+        ...s, 
+        selectionStart: date, 
+        selectionEnd: null, 
+        selectionPhase: isAlreadySelected ? 'toggling' : 'selecting', 
+        isDragging: true, 
+        hoverDate: date 
+      }
+    })
   }, [])
 
   const onDragEnter = useCallback((date: Date) => {
@@ -177,7 +212,13 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
       const end = s.hoverDate
       if (!end || !s.selectionStart) return { ...s, isDragging: false, selectionPhase: 'idle' }
       const [start, finalEnd] = end < s.selectionStart ? [end, s.selectionStart] : [s.selectionStart, end]
-      return { ...s, selectionStart: start, selectionEnd: finalEnd, hoverDate: null, isDragging: false, selectionPhase: 'idle' }
+      const isPoint = isSameDay(start, finalEnd)
+      
+      // If we were toggling, we keep that phase so onDateClick can catch it.
+      // Otherwise, keep 'selecting' if it was a point so onDateClick can finalize it to 'idle'.
+      const nextPhase = s.selectionPhase === 'toggling' ? 'toggling' : (isPoint ? 'selecting' : 'idle')
+      
+      return { ...s, selectionStart: start, selectionEnd: finalEnd, hoverDate: null, isDragging: false, selectionPhase: nextPhase }
     })
   }, [])
 
@@ -209,12 +250,28 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
     })
   }, [])
 
-  const setDateNote = useCallback((key: string, content: string) => {
+  const setDateNote = useCallback((id: string | null, content: string, start: string, end?: string) => {
     setNotes(prev => {
-      const next: NotesState = {
-        ...prev,
-        dateNotes: { ...prev.dateNotes, [key as DateString]: { content, updatedAt: Date.now() } },
+      let nextDateNotes = [...prev.dateNotes]
+      
+      if (id) {
+        // Update existing
+        nextDateNotes = nextDateNotes.map(n => 
+          n.id === id ? { ...n, content, updatedAt: Date.now(), startDate: start as DateString, endDate: end as DateString } : n
+        )
+      } else {
+        // Create new
+        const newNote: Note = {
+          id: crypto.randomUUID(),
+          content,
+          updatedAt: Date.now(),
+          startDate: start as DateString,
+          endDate: end as DateString
+        }
+        nextDateNotes.push(newNote)
       }
+
+      const next = { ...prev, dateNotes: nextDateNotes }
       storage.notes.set(next)
       return next
     })
@@ -230,11 +287,9 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
     })
   }, [])
 
-  const deleteDateNote = useCallback((key: string) => {
+  const deleteDateNote = useCallback((id: string) => {
     setNotes(prev => {
-      const dNotes = { ...prev.dateNotes }
-      delete dNotes[key as DateString]
-      const next = { ...prev, dateNotes: dNotes }
+      const next = { ...prev, dateNotes: prev.dateNotes.filter(n => n.id !== id) }
       storage.notes.set(next)
       return next
     })
@@ -260,7 +315,15 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
       onDateClick, onDateHover, onDragStart, onDragEnter, onDragEnd,
       clearSelection, toggleFocus, toggleYearView, setViewMode,
     }}>
-      <NotesContext.Provider value={{ notes, setMonthMemo, setDateNote, deleteMonthMemo, deleteDateNote }}>
+      <NotesContext.Provider value={{ 
+        notes, 
+        hoveredNoteId,
+        setMonthMemo, 
+        setDateNote, 
+        deleteMonthMemo, 
+        deleteDateNote,
+        setHoveredNoteId
+      }}>
         <EventsContext.Provider value={{ events, addEvent, deleteEvent, editEvent }}>
           {children}
         </EventsContext.Provider>

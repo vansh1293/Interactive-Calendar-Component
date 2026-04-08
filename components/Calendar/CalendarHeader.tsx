@@ -9,7 +9,6 @@ import { MONTH_IMAGES } from '@/lib/constants'
 import { MONTH_ENVIRONMENTS } from '@/lib/backgrounds'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ClimateAlert from '@/components/UI/ClimateAlert'
-import SeasonalParticles from '@/components/UI/SeasonalParticles'
 
 const CalendarHeader = memo(function CalendarHeader() {
   const { state, goNextMonth, goPrevMonth, goToToday } = useCalendarContext()
@@ -21,6 +20,12 @@ const CalendarHeader = memo(function CalendarHeader() {
   const env = MONTH_ENVIRONMENTS[monthIndex]
   const isCurrentMonth = currentMonth.getFullYear() === today.getFullYear() &&
     currentMonth.getMonth() === today.getMonth()
+
+  // Pre-loading logic for professional smoothness
+  const nextMonthIdx = (monthIndex + 1) % 12
+  const prevMonthIdx = (monthIndex + 11) % 12
+  const nextSrc = MONTH_IMAGES[nextMonthIdx]
+  const prevSrc = MONTH_IMAGES[prevMonthIdx]
 
   return (
     <div className="relative overflow-hidden rounded-t-[24px]" style={{ height: '286px' }}>
@@ -45,9 +50,14 @@ const CalendarHeader = memo(function CalendarHeader() {
         </motion.div>
       </AnimatePresence>
 
-      {/* ── Gradient overlay & Particles ───────────────────── */}
+      {/* Hidden Pre-loaders for neighboring months */}
+      <div className="hidden sr-only" aria-hidden="true">
+        <Image src={nextSrc} alt="" width={1} height={1} priority={false} />
+        <Image src={prevSrc} alt="" width={1} height={1} priority={false} />
+      </div>
+
+      {/* ── Gradient overlay ────────────────────────────────── */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
-      <SeasonalParticles type={env.particle} />
 
       {/* ── Spiral binding ─────────────────────────────────── */}
       <div className="absolute top-0 left-0 right-0 flex justify-evenly px-6 pt-2.5 z-10 pointer-events-none">
@@ -55,13 +65,13 @@ const CalendarHeader = memo(function CalendarHeader() {
           <div
             key={i}
             className="w-[10px] h-[10px] rounded-full border-[2px] border-[color:var(--color-spiral)] bg-[color:var(--color-bg-card)]"
-            style={{ 
+            style={{
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px rgba(0,0,0,0.05)'
             }}
           />
         ))}
       </div>
-      
+
       {/* ── Dynamic Climate/Weather Alert ──────────────────── */}
       <div className="absolute top-14 right-6 z-20">
         <ClimateAlert month={monthIndex} />

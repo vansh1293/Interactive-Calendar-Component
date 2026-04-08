@@ -22,7 +22,7 @@ const CalendarGrid = memo(function CalendarGrid() {
   const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`
 
   return (
-    <div className="flex flex-col gap-1.5 px-6 pb-6 pt-3">
+    <div className="flex flex-col gap-1.5 px-6 pb-6 pt-3 min-h-[460px]">
       {/* Day headers */}
       <div
         role="row"
@@ -44,17 +44,22 @@ const CalendarGrid = memo(function CalendarGrid() {
         ))}
       </div>
 
-      {/* Date grid */}
-      <AnimatePresence mode="wait" initial={false}>
+      {/* Date grid - Using popLayout for stability */}
+      <AnimatePresence mode="popLayout" initial={false}>
         <motion.div
           key={monthKey}
           role="grid"
           aria-label={`Calendar grid for ${currentMonth.toLocaleString('default', { month: 'long', year: 'numeric' })}`}
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.22, ease: 'easeOut' }}
-          className="flex flex-col gap-1.5"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ 
+            type: 'spring',
+            stiffness: 200,
+            damping: 35,
+            opacity: { duration: 0.3 }
+          }}
+          className="flex flex-col gap-1.5 w-full"
         >
           {grid.map((week, wi) => (
             <div key={wi} role="row" className="grid grid-cols-7 gap-1.5">

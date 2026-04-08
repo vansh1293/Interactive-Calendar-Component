@@ -19,13 +19,13 @@ export default function SeasonalParticles({ type }: SeasonalParticlesProps) {
 
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="popLayout">
         <motion.div
           key={type}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 1 }}
+          transition={{ duration: 0.8, ease: 'easeInOut' }}
           className="absolute inset-0"
         >
           {type === 'rain' && <RainEffect />}

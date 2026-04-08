@@ -1,14 +1,14 @@
 'use client'
 
-import React, { memo, useCallback, useRef } from 'react'
-import { motion } from 'framer-motion'
+import React, { memo, useCallback, useRef, useMemo } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import { useCalendarContext } from '@/components/Providers/CalendarProvider'
 import { useEventsContext } from '@/components/Providers/CalendarProvider'
 import { useNotesContext } from '@/components/Providers/CalendarProvider'
 import type { SelectionState, Holiday } from '@/types'
 import type { DateString } from '@/types'
-import { toMonthKey } from '@/types'
-import { isSameMonth } from '@/lib/dates'
+import { FileText } from 'lucide-react'
+import { isSameMonth, isInRange } from '@/lib/dates'
 import { MAX_EVENTS_PER_DAY } from '@/lib/constants'
 
 interface DateCellProps {
@@ -25,21 +25,39 @@ const DateCell = memo(function DateCell({
 }: DateCellProps) {
   const { state, onDateClick, onDateHover, onDragStart, onDragEnter, onDragEnd } = useCalendarContext()
   const { events } = useEventsContext()
-  const { notes }  = useNotesContext()
+  const { notes, hoveredNoteId }  = useNotesContext()
 
   const isOtherMonth = selectionState === 'other-month'
   const isToday      = selectionState.startsWith('today')
   const isStart      = selectionState === 'start' || selectionState === 'today-start'
   const isEnd        = selectionState === 'end'   || selectionState === 'today-end'
-  const isInRange    = selectionState === 'in-range' || selectionState === 'today-in-range'
+  const isPartOfSelectionRange = selectionState === 'in-range' || selectionState === 'today-in-range'
   const isSelected   = isStart || isEnd
 
   const dayEvents = events
     .filter(e => e.date === dateStr)
     .slice(0, MAX_EVENTS_PER_DAY)
 
-  const hasNote    = !!notes.dateNotes[dateStr]?.content
+  const matchingNotes = useMemo(() => {
+    return notes.dateNotes.filter(n => {
+      const start = new Date(n.startDate)
+      const end = n.endDate ? new Date(n.endDate) : start
+      return isInRange(date, start, end)
+    })
+  }, [notes.dateNotes, date])
+
+  const hasNote    = matchingNotes.length > 0
+  const noteCount  = matchingNotes.length
   const hasHoliday = !!holiday
+
+  const isHoveredByNote = useMemo(() => {
+    if (!hoveredNoteId) return false
+    const note = notes.dateNotes.find(n => n.id === hoveredNoteId)
+    if (!note) return false
+    const start = new Date(note.startDate)
+    const end = note.endDate ? new Date(note.endDate) : start
+    return isInRange(date, start, end)
+  }, [notes.dateNotes, hoveredNoteId, date])
 
   // ── Event handlers ────────────────────────────────────────────
   const handleClick = useCallback(() => {
@@ -81,7 +99,7 @@ const DateCell = memo(function DateCell({
       bg-[color:var(--color-bg-selected)] text-[color:var(--color-text-on-accent)]
       shadow-[var(--shadow-cell)] scale-105 z-10
     `
-    if (isInRange) return `bg-[color:var(--color-bg-in-range)]`
+    if (isPartOfSelectionRange) return `bg-[color:var(--color-bg-in-range)]`
     return `hover:bg-[color:var(--color-bg-cell-hover)]`
   })()
 
@@ -99,7 +117,7 @@ const DateCell = memo(function DateCell({
       animate-pulse-ring
     `
     if (isWeekend)  return 'text-[color:var(--color-text-weekend)]'
-    if (isInRange)  return 'text-[color:var(--color-primary)]'
+    if (isPartOfSelectionRange)  return 'text-[color:var(--color-primary)]'
     return 'text-[color:var(--color-text-primary)]'
   })()
 
@@ -108,7 +126,7 @@ const DateCell = memo(function DateCell({
       role="gridcell"
       tabIndex={isOtherMonth ? -1 : 0}
       aria-label={`${date.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}${isToday ? ', Today' : ''}${isStart ? ', Range Start' : ''}${isEnd ? ', Range End' : ''}${holiday ? `, Holiday: ${holiday.name}` : ''}`}
-      aria-selected={isStart || isEnd || isInRange}
+      aria-selected={isStart || isEnd || isPartOfSelectionRange}
       aria-current={isToday ? 'date' : undefined}
       className={`${cellBase} ${cellState}`}
       onClick={handleClick}
@@ -121,9 +139,21 @@ const DateCell = memo(function DateCell({
       whileTap={{ scale: isOtherMonth ? 1 : 0.93 }}
     >
       {/* In-range left/right edge rounding */}
-      {isInRange && (
+      {isPartOfSelectionRange && (
         <div className="absolute inset-0 rounded-none bg-[color:var(--color-bg-in-range)] -z-10" />
       )}
+
+      {/* Hover Highlight (Hover Sync) */}
+      <AnimatePresence>
+        {isHoveredByNote && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="absolute inset-0 border-2 border-[color:var(--color-primary)] rounded-[12px] shadow-[0_0_15px_rgba(var(--rgb-primary),0.3)] z-20 pointer-events-none"
+          />
+        )}
+      </AnimatePresence>
 
       {/* Day number */}
       <span className={`${numberBase} ${numberState}`}>
@@ -157,9 +187,20 @@ const DateCell = memo(function DateCell({
         </div>
       )}
 
-      {/* Note indicator dot */}
+      {/* Note indicator icon */}
       {hasNote && !isSelected && (
-        <span className="absolute bottom-1 right-1 w-1 h-1 rounded-full bg-[color:var(--color-primary)] animate-dot-pop" />
+        <motion.div 
+          initial={{ scale: 0, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="absolute bottom-1.5 right-1.5 flex items-center gap-0.5 p-0.5 px-1 rounded-md bg-[color:var(--color-primary)] shadow-sm"
+        >
+          <FileText size={8} className="text-white" />
+          {noteCount > 1 && (
+            <span className="text-[7px] font-bold text-white leading-none">
+              {noteCount}
+            </span>
+          )}
+        </motion.div>
       )}
     </motion.div>
   )

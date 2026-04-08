@@ -30,7 +30,7 @@ export interface ThemeConfig {
 // CALENDAR STATE
 // ============================================================
 
-export type SelectionPhase = 'idle' | 'selecting'
+export type SelectionPhase = 'idle' | 'selecting' | 'toggling'
 export type ViewMode = 'single' | 'double' | 'year'
 
 export type SelectionState =
@@ -76,13 +76,16 @@ export interface CalendarEvent {
 // ============================================================
 
 export interface Note {
+  id: string
   content: string
   updatedAt: number
+  startDate: DateString
+  endDate?: DateString
 }
 
 export interface NotesState {
-  monthMemos: Record<MonthKey, Note>
-  dateNotes: Record<DateString, Note>
+  monthMemos: Record<MonthKey, { content: string; updatedAt: number }>
+  dateNotes: Note[]
 }
 
 // ============================================================
