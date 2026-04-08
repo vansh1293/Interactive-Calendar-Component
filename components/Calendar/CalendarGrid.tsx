@@ -41,7 +41,8 @@ const CalendarGrid = memo(function CalendarGrid() {
 
   return (
     <div 
-      className="flex flex-col gap-1 px-3 sm:px-5 pb-3 sm:pb-3.5 pt-1.5 overflow-hidden"
+      className="flex flex-col gap-1 px-3 sm:px-5 pb-3 sm:pb-3.5 pt-1.5 overflow-hidden touch-action-none sm:touch-pan-y"
+      style={{ touchAction: 'pan-y' }}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
     >

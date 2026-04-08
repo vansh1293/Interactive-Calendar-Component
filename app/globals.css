@@ -9,7 +9,7 @@
    ============================================================ */
 
 @theme {
-  --font-family-sans:    'Outfit', ui-sans-serif, system-ui, sans-serif;
+  --font-family-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
   --font-family-display: 'Playfair Display', ui-serif, Georgia, serif;
 }
 
@@ -22,13 +22,19 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   scroll-behavior: smooth;
+  height: auto;
+  overflow-x: hidden;
 }
 
 body {
-  background-color: #000;   /* fallback while image loads */
+  background-color: #000;
+  /* fallback while image loads */
   color: var(--color-text-primary);
   min-height: 100vh;
+  height: auto;
   position: relative;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Keyboard-only focus ring (hidden for mouse users) */
@@ -52,10 +58,23 @@ body {
 }
 
 /* Custom scrollbar */
-::-webkit-scrollbar       { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: var(--color-bg-page); }
-::-webkit-scrollbar-thumb { background: var(--color-border); border-radius: 4px; }
-::-webkit-scrollbar-thumb:hover { background: var(--color-text-muted); }
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg-page);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
 
 /* Selection highlight */
 ::selection {
@@ -65,7 +84,7 @@ body {
 
 /* Font variable bridge for next/font */
 html {
-  --font-sans:    var(--font-outfit, 'Outfit', sans-serif);
+  --font-sans: var(--font-outfit, 'Outfit', sans-serif);
   --font-display: var(--font-playfair, 'Playfair Display', serif);
 }
 

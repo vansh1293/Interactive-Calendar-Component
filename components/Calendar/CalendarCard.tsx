@@ -78,12 +78,12 @@ const CalendarCard = memo(function CalendarCard() {
 
       {/* ── Main card ─────────────────────────────────────────── */}
       <div
-        className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_310px] rounded-[24px] overflow-hidden"
+        className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_310px] rounded-[24px]"
         style={{ boxShadow: 'var(--shadow-card)' }}
       >
         {/* Calendar */}
         <article
-          className="flex flex-col overflow-hidden"
+          className="flex flex-col"
           style={{ backgroundColor: 'var(--color-bg-card)' }}
           aria-label="Interactive calendar"
         >
