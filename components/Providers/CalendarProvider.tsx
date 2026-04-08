@@ -174,18 +174,19 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
 
   const onDateClick = useCallback((date: Date) => {
     setState(s => {
-      // Toggle logic: If we detected a toggle intent during mousedown
-      if (s.selectionPhase === 'toggling' && s.selectionStart && isSameDay(s.selectionStart, date)) {
+      // 1. Unified State-Based Toggle:
+      // If the clicked date is already SELECTED as a single date, clear it.
+      if (s.selectionStart && !s.selectionEnd && isSameDay(s.selectionStart, date)) {
         return { ...s, selectionStart: null, selectionEnd: null, selectionPhase: 'idle', hoverDate: null }
       }
 
-      if (s.selectionPhase === 'idle' || (s.selectionStart && s.selectionEnd)) {
-        return { ...s, selectionStart: date, selectionEnd: null, selectionPhase: 'selecting', hoverDate: null }
+      // 2. If it was already a range, clicking starts a new single selection.
+      if (s.selectionStart && s.selectionEnd) {
+        return { ...s, selectionStart: date, selectionEnd: null, selectionPhase: 'idle', hoverDate: null }
       }
-      const [start, end] = s.selectionStart && date < s.selectionStart
-        ? [date, s.selectionStart]
-        : [s.selectionStart!, date]
-      return { ...s, selectionEnd: end, selectionStart: start, selectionPhase: 'idle', hoverDate: null }
+
+      // 3. Otherwise, select as single date.
+      return { ...s, selectionStart: date, selectionEnd: null, selectionPhase: 'idle', hoverDate: null }
     })
   }, [])
 
@@ -194,17 +195,14 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
   }, [])
 
   const onDragStart = useCallback((date: Date) => {
-    setState(s => {
-      const isAlreadySelected = s.selectionStart && isSameDay(s.selectionStart, date) && !s.selectionEnd
-      return {
-        ...s,
-        selectionStart: date,
-        selectionEnd: null,
-        selectionPhase: isAlreadySelected ? 'toggling' : 'selecting',
-        isDragging: true,
-        hoverDate: date
-      }
-    })
+    setState(s => ({
+      ...s,
+      isDragging: true,
+      hoverDate: date,
+      selectionPhase: 'selecting'
+      // We no longer set selectionStart here.
+      // Doing so causes the 'instant-deselect' loop on mobile taps.
+    }))
   }, [])
 
   const onDragEnter = useCallback((date: Date) => {
@@ -213,17 +211,25 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
 
   const onDragEnd = useCallback(() => {
     setState(s => {
-      if (!s.isDragging) return s
-      const end = s.hoverDate
-      if (!end || !s.selectionStart) return { ...s, isDragging: false, selectionPhase: 'idle' }
-      const [start, finalEnd] = end < s.selectionStart ? [end, s.selectionStart] : [s.selectionStart, end]
-      const isPoint = isSameDay(start, finalEnd)
+      if (!s.isDragging || !s.hoverDate) return { ...s, isDragging: false }
 
-      // If we were toggling, we keep that phase so onDateClick can catch it.
-      // Otherwise, keep 'selecting' if it was a point so onDateClick can finalize it to 'idle'.
-      const nextPhase = s.selectionPhase === 'toggling' ? 'toggling' : (isPoint ? 'selecting' : 'idle')
+      // If we actually dragged to a new date, commit the range.
+      // If we didn't move, we do nothing and let onDateClick handle it.
+      if (s.selectionStart && !isSameDay(s.selectionStart, s.hoverDate)) {
+        const start = s.selectionStart
+        const end = s.hoverDate
+        const [finalStart, finalEnd] = end < start ? [end, start] : [start, end]
+        return {
+          ...s,
+          selectionStart: finalStart,
+          selectionEnd: finalEnd,
+          hoverDate: null,
+          isDragging: false,
+          selectionPhase: 'idle'
+        }
+      }
 
-      return { ...s, selectionStart: start, selectionEnd: finalEnd, hoverDate: null, isDragging: false, selectionPhase: nextPhase }
+      return { ...s, isDragging: false, hoverDate: null, selectionPhase: 'idle' }
     })
   }, [])
 
