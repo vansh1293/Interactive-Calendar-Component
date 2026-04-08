@@ -37,7 +37,7 @@ const CalendarHeader = memo(function CalendarHeader() {
   const prevSrc = MONTH_IMAGES[prevMonthIdx]
 
   return (
-    <div className="relative overflow-hidden rounded-t-[24px]" style={{ height: '254px' }}>
+    <div className="relative overflow-hidden rounded-t-[24px] h-[190px] sm:h-[220px] lg:h-[254px] transition-all duration-500">
       {/* ── Hero image with true crossfade ─────────────────── */}
       <AnimatePresence mode="sync" initial={false}>
         <motion.div
@@ -54,7 +54,7 @@ const CalendarHeader = memo(function CalendarHeader() {
             fill
             className="object-cover"
             priority={monthIndex === today.getMonth()}
-            sizes="(max-width: 768px) 100vw, 600px"
+            sizes="(max-width: 768px) 100vw, 940px"
           />
         </motion.div>
       </AnimatePresence>
@@ -69,11 +69,11 @@ const CalendarHeader = memo(function CalendarHeader() {
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
 
       {/* ── Spiral binding ─────────────────────────────────── */}
-      <div className="absolute top-0 left-0 right-0 flex justify-evenly px-6 pt-2.5 z-10 pointer-events-none">
+      <div className="absolute top-0 left-0 right-0 flex justify-evenly px-4 sm:px-6 pt-2 sm:pt-2.5 z-10 pointer-events-none opacity-60 sm:opacity-100">
         {Array.from({ length: 24 }).map((_, i) => (
           <div
             key={i}
-            className="w-[10px] h-[10px] rounded-full border-[2px] border-[color:var(--color-spiral)] bg-[color:var(--color-bg-card)]"
+            className="w-[6px] h-[6px] sm:w-[10px] sm:h-[10px] rounded-full border border-white/20 sm:border-[2px] border-[color:var(--color-spiral)] bg-[color:var(--color-bg-card)]"
             style={{
               boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px rgba(0,0,0,0.05)'
             }}
@@ -82,23 +82,23 @@ const CalendarHeader = memo(function CalendarHeader() {
       </div>
 
       {/* ── Dynamic Climate/Weather Alert ──────────────────── */}
-      <div className="absolute top-10 right-5 z-20">
+      <div className="absolute top-8 sm:top-10 right-4 sm:right-5 z-20">
         <ClimateAlert month={monthIndex} />
       </div>
 
-      <div className="absolute bottom-5 left-6 z-20">
-        <div key={`header-nav-${monthKey}`} className="flex items-center gap-3 relative h-10">
+      <div className="absolute bottom-4 sm:bottom-5 left-4 sm:left-6 z-20 max-w-[calc(100%-8rem)]">
+        <div key={`header-nav-${monthKey}`} className="flex items-center gap-2 sm:gap-3 relative h-8 sm:h-10">
 
           {/* Month Range Selector */}
           <div className="relative group cursor-pointer" onClick={() => togglePicker(state.activePicker === 'month' ? null : 'month')}>
-            <div className={`flex items-center gap-2 bg-black/20 backdrop-blur-md rounded-xl px-2.5 py-1.5 border border-white/10 hover:bg-white/20 transition-all ${state.activePicker === 'month' ? 'ring-1 ring-white/30 bg-white/10' : ''}`}>
+            <div className={`flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2 border border-white/10 hover:bg-white/20 transition-all ${state.activePicker === 'month' ? 'ring-1 ring-white/30 bg-white/10' : ''}`}>
               <h2
-                className="text-white font-serif text-2xl sm:text-3xl font-bold leading-none select-none"
+                className="text-white font-serif text-lg sm:text-xl font-bold leading-none select-none"
                 style={{ fontFamily: 'var(--font-playfair)' }}
               >
                 {formatMonthName(currentMonth)}
               </h2>
-              <ChevronLeft size={14} className={`text-white/40 transition-transform duration-300 ${state.activePicker === 'month' ? 'rotate-90' : '-rotate-90'}`} />
+              <ChevronLeft className={`w-3.5 h-3.5 text-white/40 transition-transform duration-300 ${state.activePicker === 'month' ? 'rotate-90' : '-rotate-90'}`} />
             </div>
 
             {/* Month Dropdown Menu */}
@@ -109,14 +109,14 @@ const CalendarHeader = memo(function CalendarHeader() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 10 }}
                   onClick={(e) => e.stopPropagation()}
-                  className="absolute bottom-full left-0 mb-3 w-56 bg-black/60 shadow-2xl backdrop-blur-2xl rounded-2xl border border-white/20 p-2 grid grid-cols-3 gap-1 z-50 text-white"
+                  className="absolute bottom-full left-0 mb-3 w-48 sm:w-56 bg-black/70 shadow-2xl backdrop-blur-2xl rounded-2xl border border-white/20 p-2 grid grid-cols-3 gap-1 z-50 text-white"
                 >
                   {Array.from({ length: 12 }, (_, i) => i).map((m) => (
                     <button
                       key={m}
                       onClick={() => setMonth(m)}
                       className={`
-                        px-1.5 py-1.5 rounded-lg text-[10px] font-bold uppercase tracking-wider transition-all
+                        px-1 py-1.5 rounded-lg text-[9px] sm:text-[10px] font-bold uppercase tracking-wider transition-all
                         ${currentMonth.getMonth() === m
                           ? 'bg-[color:var(--color-primary)] text-white'
                           : 'text-white/70 hover:bg-white/10'}
@@ -130,15 +130,15 @@ const CalendarHeader = memo(function CalendarHeader() {
             </AnimatePresence>
           </div>
 
-          <div className="w-[1px] h-6 bg-white/10" />
+          <div className="w-[1px] h-4 sm:h-6 bg-white/10" />
 
           {/* Year Range Selector */}
           <div className="relative group cursor-pointer" onClick={() => togglePicker(state.activePicker === 'year' ? null : 'year')}>
-            <div className={`flex items-center gap-2 bg-black/20 backdrop-blur-md rounded-xl px-3 py-1.5 border border-white/10 hover:bg-white/20 transition-all ${state.activePicker === 'year' ? 'ring-1 ring-white/30 bg-white/10' : ''}`}>
-              <span className="text-white/70 text-[12px] sm:text-[13px] font-bold tracking-[0.2em] uppercase transition-colors group-hover:text-white select-none">
+            <div className={`flex items-center gap-2 bg-black/30 backdrop-blur-md rounded-xl px-2.5 sm:px-3 py-1.5 sm:py-2 border border-white/10 hover:bg-white/20 transition-all ${state.activePicker === 'year' ? 'ring-1 ring-white/30 bg-white/10' : ''}`}>
+              <span className="text-white/70 text-[11px] sm:text-xs font-bold tracking-[0.15em] sm:tracking-[0.2em] uppercase transition-colors group-hover:text-white select-none translate-y-[1px]">
                 {formatYear(currentMonth)}
               </span>
-              <ChevronLeft size={12} className={`text-white/40 transition-transform duration-300 ${state.activePicker === 'year' ? 'rotate-90' : '-rotate-90'}`} />
+              <ChevronLeft className={`w-3 h-3 sm:w-3.5 sm:h-3.5 text-white/40 transition-transform duration-300 ${state.activePicker === 'year' ? 'rotate-90' : '-rotate-90'}`} />
             </div>
 
             {/* Year Dropdown Menu */}
@@ -149,12 +149,7 @@ const CalendarHeader = memo(function CalendarHeader() {
                   animate={{ opacity: 1, scale: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.95, y: 10 }}
                   onClick={(e) => e.stopPropagation()}
-                  className="
-                    absolute bottom-full left-0 mb-3 w-32 
-                    bg-black/60 shadow-2xl backdrop-blur-2xl rounded-2xl border border-white/20 
-                    p-1.5 flex flex-col gap-0.5 z-50 text-white
-                    max-h-[190px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20
-                  "
+                  className="absolute bottom-full left-0 mb-3 w-28 sm:w-32 bg-black/70 shadow-2xl backdrop-blur-2xl rounded-2xl border border-white/20 p-1.5 flex flex-col gap-0.5 z-50 text-white max-h-[160px] sm:max-h-[190px] overflow-y-auto scrollbar-thin scrollbar-thumb-white/20"
                 >
                   {Array.from({ length: 51 }, (_, i) => 2000 + i).map((y) => (
                     <button
@@ -162,7 +157,7 @@ const CalendarHeader = memo(function CalendarHeader() {
                       id={state.activePicker === 'year' && currentMonth.getFullYear() === y ? 'active-year-selection' : undefined}
                       onClick={() => setYear(y)}
                       className={`
-                        w-full px-3 py-2 rounded-lg text-xs font-bold transition-all shrink-0
+                        w-full px-2 sm:px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold transition-all shrink-0
                         ${currentMonth.getFullYear() === y
                           ? 'bg-[color:var(--color-primary)] text-white shadow-lg'
                           : 'text-white/60 hover:bg-white/10 hover:text-white'}
@@ -180,7 +175,7 @@ const CalendarHeader = memo(function CalendarHeader() {
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="hidden lg:inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/10 backdrop-blur-md border border-white/10"
+            className="hidden sm:inline-flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white/10 backdrop-blur-md border border-white/10"
           >
             <span className="text-[10px]">
               {env.particle === 'fog' ? '🌫️' :
@@ -198,36 +193,31 @@ const CalendarHeader = memo(function CalendarHeader() {
       </div>
 
       {/* ── Navigation controls ────────────────────────────── */}
-      <div className="absolute bottom-4 right-4 z-10 flex items-center gap-1.5">
+      <div className="absolute bottom-3 sm:bottom-4 right-3 sm:right-4 z-10 flex items-center gap-1 sm:gap-1.5">
         {!isCurrentMonth && (
           <motion.button
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.8 }}
             onClick={goToToday}
-            title="Jump to today"
-            aria-label="Jump to today"
-            className="
-              p-1.5 rounded-full bg-white/20 backdrop-blur-sm
-              text-white hover:bg-white/35 transition-colors duration-150
-            "
+            className="p-1 sm:p-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/35 transition-colors duration-150"
           >
-            <RotateCcw size={12} strokeWidth={2.5} />
+            <RotateCcw className="w-2.5 h-2.5 sm:w-3 sm:h-3" strokeWidth={2.5} />
           </motion.button>
         )}
 
         <button
           onClick={goPrevMonth}
-          className="p-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/35 active:scale-95 transition-all"
+          className="p-1 sm:p-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/35 active:scale-95 transition-all"
         >
-          <ChevronLeft size={16} strokeWidth={2.5} />
+          <ChevronLeft className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
         </button>
 
         <button
           onClick={goNextMonth}
-          className="p-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/35 active:scale-95 transition-all"
+          className="p-1 sm:p-1.5 rounded-full bg-white/20 backdrop-blur-sm text-white hover:bg-white/35 active:scale-95 transition-all"
         >
-          <ChevronRight size={16} strokeWidth={2.5} />
+          <ChevronRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" strokeWidth={2.5} />
         </button>
       </div>
     </div>

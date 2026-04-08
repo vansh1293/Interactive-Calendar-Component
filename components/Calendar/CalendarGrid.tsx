@@ -22,7 +22,7 @@ const CalendarGrid = memo(function CalendarGrid() {
   const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`
 
   return (
-    <div className="flex flex-col gap-1 px-5 pb-3.5 pt-1.5">
+    <div className="flex flex-col gap-1 px-3 sm:px-5 pb-3 sm:pb-3.5 pt-1.5 overflow-hidden">
       {/* Day headers */}
       <div
         role="row"
@@ -35,7 +35,7 @@ const CalendarGrid = memo(function CalendarGrid() {
             role="columnheader"
             aria-label={day}
             className={`
-              text-center text-[10px] font-semibold tracking-widest uppercase py-1
+              text-center text-[9px] sm:text-[10px] font-semibold tracking-[0.15em] sm:tracking-widest uppercase py-1
               ${i >= 5 ? 'text-[color:var(--color-weekend)]' : 'text-[color:var(--color-text-muted)]'}
             `}
           >
@@ -59,11 +59,10 @@ const CalendarGrid = memo(function CalendarGrid() {
             damping: 35,
             opacity: { duration: 0.3 }
           }}
-          className="flex flex-col gap-1 w-full"
-          style={{ minHeight: '318px' }} // Exactly 6 rows at new unit
+          className="flex flex-col gap-1 w-full min-h-[269px] sm:min-h-[317px]"
         >
           {grid.map((week, wi) => (
-            <div key={wi} role="row" className="grid grid-cols-7 gap-1 h-[52px]">
+            <div key={wi} role="row" className="grid grid-cols-7 gap-1 h-[44px] sm:h-[52px]">
               {week.map((date) => {
                 const selState = getSelectionState({
                   date, today, selectionStart, selectionEnd, hoverDate, currentMonth,
@@ -93,7 +92,7 @@ const CalendarGrid = memo(function CalendarGrid() {
             Always renders enough empty rows to reach a total of 6.
           */}
           {Array.from({ length: 6 - grid.length }).map((_, i) => (
-            <div key={`spacer-${i}`} className="grid grid-cols-7 gap-1 h-[52px] opacity-0 pointer-events-none" aria-hidden="true">
+            <div key={`spacer-${i}`} className="grid grid-cols-7 gap-1 h-[44px] sm:h-[52px] opacity-0 pointer-events-none" aria-hidden="true">
               <div className="w-full h-full" />
             </div>
           ))}

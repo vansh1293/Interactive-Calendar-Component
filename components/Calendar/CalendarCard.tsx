@@ -29,46 +29,47 @@ const CalendarCard = memo(function CalendarCard() {
       </AnimatePresence>
 
       {/* ── Selection toolbar — only shows when a date is picked ── */}
-      <div className="h-8 mb-2.5 flex items-center">
+      <div className="min-h-8 mb-2 flex items-center">
         <AnimatePresence>
           {selectionStart && (
             <motion.div
               key="toolbar"
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -6 }}
-              transition={{ duration: 0.2 }}
-              className="flex items-center"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="flex items-center flex-wrap gap-2"
             >
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-xs shadow-sm"
+              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[11px] shadow-sm max-w-[calc(100vw-4rem)]"
                 style={{
                   backgroundColor: 'var(--color-primary-light)',
                   borderColor: 'var(--color-border-focus)',
                 }}
               >
-                <span className="font-semibold text-[11px]" style={{ color: 'var(--color-primary)' }}>
-                  {rangeDays && rangeDays > 1
-                    ? `${formatShortDate(selectionStart)} → ${selectionEnd ? formatShortDate(selectionEnd) : '…'} (${rangeDays} days)`
-                    : formatShortDate(selectionStart)
-                  }
-                </span>
-                <button
-                  onClick={toggleFocus}
-                  title={focusMode ? 'Exit focus' : 'Focus mode'}
-                  aria-label={focusMode ? 'Exit focus mode' : 'Enter focus mode'}
-                  className="p-0.5 rounded hover:bg-white/20 transition-colors"
-                  style={{ color: 'var(--color-primary)' }}
-                >
-                  <Focus size={11} />
-                </button>
-                <button
-                  onClick={clearSelection}
-                  aria-label="Clear date selection"
-                  className="p-0.5 rounded hover:bg-white/20 transition-colors"
-                  style={{ color: 'var(--color-primary)' }}
-                >
-                  <X size={11} />
-                </button>
+                <div className="flex items-center gap-2 overflow-hidden">
+                  <span className="font-bold truncate" style={{ color: 'var(--color-primary)' }}>
+                    {rangeDays && rangeDays > 1
+                      ? `${formatShortDate(selectionStart)} → ${selectionEnd ? formatShortDate(selectionEnd) : '…'} (${rangeDays}d)`
+                      : formatShortDate(selectionStart)
+                    }
+                  </span>
+                </div>
+                <div className="flex items-center gap-1 border-l border-[color:var(--color-primary)]/20 pl-1.5 ml-0.5">
+                  <button
+                    onClick={toggleFocus}
+                    title={focusMode ? 'Exit focus' : 'Focus mode'}
+                    className="p-1 rounded hover:bg-white/20 transition-colors"
+                    style={{ color: 'var(--color-primary)' }}
+                  >
+                    <Focus size={11} />
+                  </button>
+                  <button
+                    onClick={clearSelection}
+                    className="p-1 rounded hover:bg-white/20 transition-colors"
+                    style={{ color: 'var(--color-primary)' }}
+                  >
+                    <X size={11} />
+                  </button>
+                </div>
               </div>
             </motion.div>
           )}
@@ -82,7 +83,7 @@ const CalendarCard = memo(function CalendarCard() {
       >
         {/* Calendar */}
         <article
-          className="flex flex-col"
+          className="flex flex-col overflow-hidden"
           style={{ backgroundColor: 'var(--color-bg-card)' }}
           aria-label="Interactive calendar"
         >
@@ -92,7 +93,7 @@ const CalendarCard = memo(function CalendarCard() {
 
         {/* Notes */}
         <aside
-          className="p-6 flex flex-col gap-3.5 min-h-[320px] lg:min-h-0 border-t lg:border-t-0 lg:border-l"
+          className="p-4 sm:p-6 flex flex-col gap-3.5 min-h-[300px] lg:min-h-0 border-t lg:border-t-0 lg:border-l"
           style={{
             backgroundColor: 'var(--color-bg-notes)',
             borderColor: 'var(--color-border)',
@@ -101,7 +102,7 @@ const CalendarCard = memo(function CalendarCard() {
         >
           <header className="flex items-center gap-2 pb-3 border-b" style={{ borderColor: 'var(--color-border)' }}>
             <div className="w-1.5 h-5 rounded-full" style={{ backgroundColor: 'var(--color-primary)' }} />
-            <h2 className="text-sm font-bold" style={{ color: 'var(--color-text-primary)' }}>Notes</h2>
+            <h2 className="text-sm font-bold uppercase tracking-wider" style={{ color: 'var(--color-text-primary)' }}>Notes</h2>
           </header>
           <NotesPanel />
         </aside>
