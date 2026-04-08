@@ -116,7 +116,7 @@ const NotesPanel = memo(function NotesPanel() {
   `
 
   return (
-    <div className="notes-panel flex flex-col gap-5 h-full overflow-y-auto px-1 pb-8">
+    <div className="notes-panel flex flex-col gap-5 lg:h-full lg:overflow-y-auto px-1 pb-8 scrollbar-thin">
 
       {/* ── Month Memo ───────────────────────────────────────── */}
       <section aria-labelledby="month-memo-label" className="space-y-2.5">
