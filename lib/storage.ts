@@ -44,7 +44,7 @@ export const storage = {
   notes: {
     get: (): NotesState => safeGet<NotesState>(STORAGE_KEYS.NOTES, {
       monthMemos: {},
-      dateNotes:  {},
+      dateNotes:  [],
     }),
     set: (n: NotesState): void => safeSet(STORAGE_KEYS.NOTES, n),
   },
