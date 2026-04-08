@@ -32,8 +32,8 @@ const MONTH_EFFECTS: Record<number, EffectConfig> = {
   3: { type: 'dust', count: 100 },
   4: { type: 'dust', count: 140 },
   5: { type: 'stormLeaves', count: 160 },
-  6: { type: 'lushLeaves', count: 20 }, // July — reduced leaf density
-  7: { type: 'ripples', count: 25 },
+  6: { type: 'ripples', count: 40 }, // July — border ripples
+  7: { type: 'heavyRain', count: 120 }, // August — fast heavy rain
   8: { type: 'drizzle', count: 70 },
   9: { type: 'sparkles', count: 75 },
   10: { type: 'mist', count: 40 },
@@ -92,12 +92,33 @@ function spawn(W: number, H: number, type: EffectType): Particle {
       opacity: rnd(0.4, 0.7), phase: rnd(0, Math.PI * 2),
       color: 'rgba(200,230,255,0.6)',
     }
-    case 'ripples': return {
+    case 'heavyRain': return {
       ...base,
-      x: rnd(W * 0.1, W * 0.9), y: rnd(H * 0.1, H * 0.9),
-      size: 1, len: rnd(40, 100), vy: 0, vx: 0,
-      opacity: rnd(0.4, 0.7), phase: rnd(0.015, 0.035),
-      color: 'rgba(200,230,255,0.5)',
+      x: rnd(0, W), y: rnd(-H, 0),
+      size: rnd(1.8, 3.2), len: rnd(60, 100), vy: rnd(35, 50), vx: rnd(-1, 1),
+      opacity: rnd(0.5, 0.8), phase: rnd(0, Math.PI * 2),
+      color: 'rgba(215,235,255,0.75)',
+    }
+    case 'ripples': {
+      // July (Month 6) ripples are focused on borders
+      const isJuly = new Date().getMonth() === 6; // Note: month passed via cfg might be better, but we detect it via currentMonth in state
+      // Actually, we should probably pass the month index to spawn or use a different type. 
+      // For now, I'll use a random border-focused position for the ripple type globally or check if we are in July.
+      // Better: specialized spawn call in useEffect or a check here if we want global change for this type.
+      // User said "in july give... mainly on the border".
+      
+      let rx = rnd(W * 0.1, W * 0.9);
+      let ry = rnd(H * 0.1, H * 0.9);
+      
+      // I'll make them appear anywhere but skew towards edges if we define them for July elsewhere.
+      // Let's just make the ripple type high quality and let the useEffect handle the specialized border spawn for July.
+      return {
+        ...base,
+        x: rx, y: ry,
+        size: 1, len: rnd(45, 110), vy: 0, vx: 0,
+        opacity: rnd(0.5, 0.8), phase: rnd(0.015, 0.035),
+        color: 'rgba(215,235,255,0.6)',
+      }
     }
     case 'dust': return {
       ...base,
@@ -177,7 +198,7 @@ function drawRain(ctx: CanvasRenderingContext2D, p: Particle, t: number) {
 
 function drawRipple(ctx: CanvasRenderingContext2D, p: Particle) {
   const progress = p.size / (p.len ?? 50); const alpha = p.opacity * (1 - progress)
-  ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = p.color; ctx.lineWidth = 1.3 * (1 - progress)
+  ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = p.color; ctx.lineWidth = 2.0 * (1 - progress)
   ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.stroke()
   if (p.size > 8) { ctx.beginPath(); ctx.arc(p.x, p.y, p.size * 0.6, 0, Math.PI * 2); ctx.stroke() }
   ctx.restore()
@@ -241,8 +262,8 @@ function update(p: Particle, W: number, H: number, t: number) {
     p.x += p.vx + Math.sin(t * 0.0012 + p.phase) * 0.4; p.y += p.vy + Math.cos(t * 0.0009 + p.phase) * 0.15
     if (p.rot !== undefined) p.rot += 0.008; if (p.y > H + 40) p.y = -40; if (p.x < -40) p.x = W + 40; return
   }
-  if (p.type === 'drizzle') {
-    p.y += p.vy; if (p.y > H + 50) { p.y = rnd(-80, -10); p.x = rnd(0, W) }
+  if (p.type === 'drizzle' || p.type === 'heavyRain') {
+    p.y += p.vy; if (p.y > H + 100) { p.y = rnd(-120, -10); p.x = rnd(0, W) }
     return
   }
   p.x += p.vx + sway; p.y += p.vy; p.angle += p.spin
@@ -263,7 +284,22 @@ const BackgroundScene = memo(function BackgroundScene() {
   useEffect(() => {
     const canvas = canvasRef.current; if (!canvas) return
     const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }; resize(); window.addEventListener('resize', resize)
+    
     particlesRef.current = Array.from({ length: cfg.count }, () => spawn(canvas.width, canvas.height, cfg.type))
+
+    // specialized logic for border ripples in July
+    if (month === 6) {
+      particlesRef.current.forEach(p => {
+        if (p.type === 'ripples') {
+          const side = Math.floor(Math.random() * 4)
+          const margin = 140
+          if (side === 0) { p.y = rnd(0, margin); p.x = rnd(0, canvas.width) }
+          else if (side === 1) { p.y = rnd(canvas.height - margin, canvas.height); p.x = rnd(0, canvas.width) }
+          else if (side === 2) { p.x = rnd(0, margin); p.y = rnd(0, canvas.height) }
+          else { p.x = rnd(canvas.width - margin, canvas.width); p.y = rnd(0, canvas.height) }
+        }
+      })
+    }
 
     // Restoration of high-quality winter overlays
     if (month === 0) { // Jan Frost
@@ -277,12 +313,6 @@ const BackgroundScene = memo(function BackgroundScene() {
         const p = spawn(canvas.width, canvas.height, 'fog')
         p.opacity *= 0.4; p.vx *= 1.5; p.color = 'rgba(220,220,200,0.35)'
         return p
-      }))
-    }
-    if (month === 6) { // July light drizzle injection
-      particlesRef.current.push(...Array.from({ length: 60 }, () => {
-        const p = spawn(canvas.width, canvas.height, 'drizzle')
-        p.opacity *= 0.8; p.vy *= 1.1; return p
       }))
     }
     if (month === 11) { // Dec Light Snow Flurries
@@ -307,7 +337,7 @@ const BackgroundScene = memo(function BackgroundScene() {
           case 'snow': case 'blizzard': drawSnowflake(ctx, p); break
           case 'blossom': drawPetal(ctx, p); break // Reusing petal logic for blossom
           case 'stormLeaves': case 'lushLeaves': drawLeaf(ctx, p); break
-          case 'drizzle': drawRain(ctx, p, t); break
+          case 'drizzle': case 'heavyRain': drawRain(ctx, p, t); break
           case 'dust': drawDust(ctx, p, t); break
           case 'ripples': drawRipple(ctx, p); break
           case 'sparkles': drawSparkle(ctx, p, t); break

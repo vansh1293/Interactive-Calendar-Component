@@ -76,7 +76,7 @@ const DateCell = memo(function DateCell({
   `
 
   const cellState = (() => {
-    if (isOtherMonth)  return 'opacity-25 cursor-default pointer-events-none'
+    if (isOtherMonth)  return 'opacity-50 cursor-default pointer-events-none'
     if (isStart || isEnd) return `
       bg-[color:var(--color-bg-selected)] text-[color:var(--color-text-on-accent)]
       shadow-[var(--shadow-cell)] scale-105 z-10
@@ -132,13 +132,15 @@ const DateCell = memo(function DateCell({
 
       {/* Holiday indicator */}
       {hasHoliday && (
-        <span
+        <motion.span
           title={holiday!.name}
-          className="text-[9px] leading-none mb-0.5 text-[color:var(--color-holiday)]"
+          animate={{ scale: [1, 1.2, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          className="text-xs leading-none mb-0.5"
           aria-label={`Holiday: ${holiday!.name}`}
         >
           {holiday!.emoji}
-        </span>
+        </motion.span>
       )}
 
       {/* Event chips */}

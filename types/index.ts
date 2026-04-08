@@ -5,7 +5,7 @@
 
 // Branded types for extra type safety
 export type DateString = string & { readonly _brand: 'DateString' }
-export type MonthKey   = string & { readonly _brand: 'MonthKey' }
+export type MonthKey = string & { readonly _brand: 'MonthKey' }
 
 // Helpers to create branded types safely
 export const toDateString = (d: Date): DateString =>
@@ -21,7 +21,7 @@ export const toMonthKey = (d: Date): MonthKey =>
 export type Theme = 'classic' | 'dark' | 'sepia' | 'forest'
 
 export interface ThemeConfig {
-  id:    Theme
+  id: Theme
   label: string
   emoji: string
 }
@@ -31,7 +31,7 @@ export interface ThemeConfig {
 // ============================================================
 
 export type SelectionPhase = 'idle' | 'selecting'
-export type ViewMode       = 'single' | 'double' | 'year'
+export type ViewMode = 'single' | 'double' | 'year'
 
 export type SelectionState =
   | 'start'
@@ -45,16 +45,16 @@ export type SelectionState =
   | 'other-month'
 
 export interface CalendarState {
-  currentMonth:   Date
-  today:          Date
+  currentMonth: Date
+  today: Date
   selectionStart: Date | null
-  selectionEnd:   Date | null
-  hoverDate:      Date | null
+  selectionEnd: Date | null
+  hoverDate: Date | null
   selectionPhase: SelectionPhase
-  isDragging:     boolean
-  viewMode:       ViewMode
-  focusMode:      boolean
-  showYearView:   boolean
+  isDragging: boolean
+  viewMode: ViewMode
+  focusMode: boolean
+  showYearView: boolean
 }
 
 // ============================================================
@@ -64,10 +64,10 @@ export interface CalendarState {
 export type EventCategory = 'work' | 'personal' | 'holiday' | 'other'
 
 export interface CalendarEvent {
-  id:        string
-  date:      DateString
-  title:     string
-  category:  EventCategory
+  id: string
+  date: DateString
+  title: string
+  category: EventCategory
   createdAt: number
 }
 
@@ -76,13 +76,13 @@ export interface CalendarEvent {
 // ============================================================
 
 export interface Note {
-  content:   string
+  content: string
   updatedAt: number
 }
 
 export interface NotesState {
   monthMemos: Record<MonthKey, Note>
-  dateNotes:  Record<DateString, Note>
+  dateNotes: Record<DateString, Note>
 }
 
 // ============================================================
@@ -90,10 +90,11 @@ export interface NotesState {
 // ============================================================
 
 export interface Holiday {
-  date:  string   // MM-DD format for repeating, or YYYY-MM-DD for one-time
-  name:  string
-  type:  'national' | 'regional' | 'international'
+  date: string   // MM-DD format for repeating, or YYYY-MM-DD for one-time
+  name: string
+  type: 'national' | 'regional' | 'international'
   emoji: string
+  tagline?: string
 }
 
 // ============================================================
@@ -101,9 +102,9 @@ export interface Holiday {
 // ============================================================
 
 export interface UndoRedoState<T> {
-  past:    T[]
+  past: T[]
   present: T
-  future:  T[]
+  future: T[]
 }
 
 // ============================================================
@@ -111,9 +112,9 @@ export interface UndoRedoState<T> {
 // ============================================================
 
 export interface CalendarStats {
-  totalEventsThisMonth:  number
-  totalNotesThisMonth:   number
-  daysUntilNextEvent:    number | null
-  selectedRangeDays:     number | null
-  daysRemainingInMonth:  number
+  totalEventsThisMonth: number
+  totalNotesThisMonth: number
+  daysUntilNextEvent: number | null
+  selectedRangeDays: number | null
+  daysRemainingInMonth: number
 }

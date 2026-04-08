@@ -7,28 +7,28 @@ export const HOLIDAYS: Holiday[] = [
   // ── Indian National Holidays (Fixed) ──────────────────
   { date: '01-01', name: "New Year's Day",        type: 'national',      emoji: '🎆' },
   { date: '01-14', name: 'Makar Sankranti / Pongal', type: 'national',    emoji: '🪁' },
-  { date: '01-26', name: 'Republic Day',           type: 'national',      emoji: '🇮🇳' },
+  { date: '01-26', name: 'Republic Day',           type: 'national',      emoji: '🇮🇳', tagline: 'Honoring the Constitution of India' },
   { date: '03-08', name: "International Women's Day", type: 'international', emoji: '💜' },
   { date: '04-14', name: 'Dr. Ambedkar Jayanti',   type: 'national',      emoji: '🏛️' },
   { date: '05-01', name: 'Labour Day',             type: 'national',      emoji: '⚒️' },
-  { date: '08-15', name: 'Independence Day',       type: 'national',      emoji: '🇮🇳' },
+  { date: '08-15', name: 'Independence Day',       type: 'national',      emoji: '🇮🇳', tagline: 'Celebrating freedom and unity' },
   { date: '10-02', name: 'Gandhi Jayanti',         type: 'national',      emoji: '🕊️' },
   { date: '11-14', name: "Children's Day",        type: 'national',      emoji: '🎈' },
   { date: '12-25', name: 'Christmas Day',          type: 'international', emoji: '🎄' },
 
   // ── 2025 Lunar/Variable Festivals ──────────────────
   { date: '2025-02-26', name: 'Maha Shivratri',    type: 'national',      emoji: '🔱' },
-  { date: '2025-03-14', name: 'Holi',              type: 'national',      emoji: '🎨' },
+  { date: '2025-03-14', name: 'Holi',              type: 'national',      emoji: '🎨', tagline: 'The vibrant festival of colors and love' },
   { date: '2025-03-31', name: 'Eid al-Fitr',       type: 'national',      emoji: '🌙' },
   { date: '2025-08-16', name: 'Janmashtami',       type: 'national',      emoji: '🐚' },
-  { date: '2025-10-20', name: 'Diwali',            type: 'national',      emoji: '🪔' },
+  { date: '2025-10-20', name: 'Diwali',            type: 'national',      emoji: '🪔', tagline: 'The festival of lights, joy, and prosperity' },
 
   // ── 2026 Lunar/Variable Festivals ──────────────────
   { date: '2026-02-15', name: 'Maha Shivratri',    type: 'national',      emoji: '🔱' },
-  { date: '2026-03-03', name: 'Holi',              type: 'national',      emoji: '🎨' },
+  { date: '2026-03-03', name: 'Holi',              type: 'national',      emoji: '🎨', tagline: 'Spreading colors of happiness' },
   { date: '2026-03-20', name: 'Eid al-Fitr',       type: 'national',      emoji: '🌙' },
   { date: '2026-09-04', name: 'Janmashtami',       type: 'national',      emoji: '🐚' },
-  { date: '2026-11-08', name: 'Diwali',            type: 'national',      emoji: '🪔' },
+  { date: '2026-11-08', name: 'Diwali',            type: 'national',      emoji: '🪔', tagline: 'Lighting up the path of righteousness' },
 ]
 
 /**

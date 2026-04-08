@@ -39,7 +39,7 @@
   --color-bg-selected:       #94A3B8;
   --color-text-primary:      #EFF6FF;
   --color-text-secondary:    #94A3B8;
-  --color-text-muted:        rgba(200,215,235,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #070A10;
   --color-border-focus:      #94A3B8;
   --color-today-ring:        #7DD3FC;
@@ -57,7 +57,7 @@
   --color-bg-selected:       #FB923C;
   --color-text-primary:      #FFF7F0;
   --color-text-secondary:    #F97316;
-  --color-text-muted:        rgba(255,210,170,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #1A0800;
   --color-border-focus:      #FB923C;
   --color-today-ring:        #F472B6;
@@ -75,7 +75,7 @@
   --color-bg-selected:       #86EFAC;
   --color-text-primary:      #F0FDF4;
   --color-text-secondary:    #4ADE80;
-  --color-text-muted:        rgba(170,240,190,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #021408;
   --color-border-focus:      #86EFAC;
   --color-today-ring:        #FCD34D;
@@ -93,7 +93,7 @@
   --color-bg-selected:       #FBBF24;
   --color-text-primary:      #FFFBEB;
   --color-text-secondary:    #D97706;
-  --color-text-muted:        rgba(255,215,100,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #180900;
   --color-border-focus:      #FBBF24;
   --color-today-ring:        #F97316;
@@ -111,7 +111,7 @@
   --color-bg-selected:       #F97316;
   --color-text-primary:      #FFF4ED;
   --color-text-secondary:    #EA580C;
-  --color-text-muted:        rgba(255,180,100,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #180300;
   --color-border-focus:      #F97316;
   --color-today-ring:        #EF4444;
@@ -129,7 +129,7 @@
   --color-bg-selected:       #D97706;
   --color-text-primary:      #FEF3C7;
   --color-text-secondary:    #B45309;
-  --color-text-muted:        rgba(220,170,80,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #120600;
   --color-border-focus:      #D97706;
   --color-today-ring:        #92400E;
@@ -147,7 +147,7 @@
   --color-bg-selected:       #38BDF8;
   --color-text-primary:      #F0F9FF;
   --color-text-secondary:    #0EA5E9;
-  --color-text-muted:        rgba(150,220,255,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #020810;
   --color-border-focus:      #38BDF8;
   --color-today-ring:        #6366F1;
@@ -165,7 +165,7 @@
   --color-bg-selected:       #22D3EE;
   --color-text-primary:      #ECFEFF;
   --color-text-secondary:    #06B6D4;
-  --color-text-muted:        rgba(150,230,240,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #021418;
   --color-border-focus:      #22D3EE;
   --color-today-ring:        #34D399;
@@ -183,7 +183,7 @@
   --color-bg-selected:       #4ADE80;
   --color-text-primary:      #F0FFF4;
   --color-text-secondary:    #16A34A;
-  --color-text-muted:        rgba(160,240,190,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #011A08;
   --color-border-focus:      #4ADE80;
   --color-today-ring:        #22D3EE;
@@ -201,7 +201,7 @@
   --color-bg-selected:       #FCD34D;
   --color-text-primary:      #FEFCE8;
   --color-text-secondary:    #CA8A04;
-  --color-text-muted:        rgba(250,220,120,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #1A1000;
   --color-border-focus:      #FCD34D;
   --color-today-ring:        #FB923C;
@@ -219,7 +219,7 @@
   --color-bg-selected:       #7DD3FC;
   --color-text-primary:      #F0F9FF;
   --color-text-secondary:    #38BDF8;
-  --color-text-muted:        rgba(180,215,240,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #021828;
   --color-border-focus:      #7DD3FC;
   --color-today-ring:        #94A3B8;
@@ -237,7 +237,7 @@
   --color-bg-selected:       #CBD5E1;
   --color-text-primary:      #F8FAFC;
   --color-text-secondary:    #94A3B8;
-  --color-text-muted:        rgba(200,215,230,0.35);
+  --color-text-muted:        rgba(255,255,255,0.65);
   --color-text-on-accent:    #080C12;
   --color-border-focus:      #CBD5E1;
   --color-today-ring:        #60A5FA;

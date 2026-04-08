@@ -4,8 +4,8 @@ import React, { memo } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useCalendarContext } from '@/components/Providers/CalendarProvider'
 import CalendarHeader from './CalendarHeader'
-import CalendarGrid   from './CalendarGrid'
-import NotesPanel     from '@/components/Notes/NotesPanel'
+import CalendarGrid from './CalendarGrid'
+import NotesPanel from '@/components/Notes/NotesPanel'
 import { getRangeDayCount, formatShortDate } from '@/lib/dates'
 import { X, Focus } from 'lucide-react'
 
@@ -29,49 +29,51 @@ const CalendarCard = memo(function CalendarCard() {
       </AnimatePresence>
 
       {/* ── Selection toolbar — only shows when a date is picked ── */}
-      <AnimatePresence>
-        {selectionStart && (
-          <motion.div
-            key="toolbar"
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.2 }}
-            className="flex items-center mb-4"
-          >
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border text-sm"
-              style={{
-                backgroundColor: 'var(--color-primary-light)',
-                borderColor: 'var(--color-border-focus)',
-              }}
+      <div className="h-9 mb-3 flex items-center">
+        <AnimatePresence>
+          {selectionStart && (
+            <motion.div
+              key="toolbar"
+              initial={{ opacity: 0, y: -6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -6 }}
+              transition={{ duration: 0.2 }}
+              className="flex items-center"
             >
-              <span className="font-semibold text-xs" style={{ color: 'var(--color-primary)' }}>
-                {rangeDays && rangeDays > 1
-                  ? `${formatShortDate(selectionStart)} → ${selectionEnd ? formatShortDate(selectionEnd) : '…'} (${rangeDays} days)`
-                  : formatShortDate(selectionStart)
-                }
-              </span>
-              <button
-                onClick={toggleFocus}
-                title={focusMode ? 'Exit focus' : 'Focus mode'}
-                aria-label={focusMode ? 'Exit focus mode' : 'Enter focus mode'}
-                className="p-0.5 rounded transition-colors"
-                style={{ color: 'var(--color-primary)' }}
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl border text-sm shadow-sm"
+                style={{
+                  backgroundColor: 'var(--color-primary-light)',
+                  borderColor: 'var(--color-border-focus)',
+                }}
               >
-                <Focus size={12} />
-              </button>
-              <button
-                onClick={clearSelection}
-                aria-label="Clear date selection"
-                className="p-0.5 rounded transition-colors"
-                style={{ color: 'var(--color-primary)' }}
-              >
-                <X size={12} />
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+                <span className="font-semibold text-xs" style={{ color: 'var(--color-primary)' }}>
+                  {rangeDays && rangeDays > 1
+                    ? `${formatShortDate(selectionStart)} → ${selectionEnd ? formatShortDate(selectionEnd) : '…'} (${rangeDays} days)`
+                    : formatShortDate(selectionStart)
+                  }
+                </span>
+                <button
+                  onClick={toggleFocus}
+                  title={focusMode ? 'Exit focus' : 'Focus mode'}
+                  aria-label={focusMode ? 'Exit focus mode' : 'Enter focus mode'}
+                  className="p-0.5 rounded hover:bg-white/20 transition-colors"
+                  style={{ color: 'var(--color-primary)' }}
+                >
+                  <Focus size={12} />
+                </button>
+                <button
+                  onClick={clearSelection}
+                  aria-label="Clear date selection"
+                  className="p-0.5 rounded hover:bg-white/20 transition-colors"
+                  style={{ color: 'var(--color-primary)' }}
+                >
+                  <X size={12} />
+                </button>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
 
       {/* ── Main card ─────────────────────────────────────────── */}
       <div

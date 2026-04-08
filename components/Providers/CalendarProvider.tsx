@@ -1,26 +1,26 @@
 'use client'
 
 import React, { createContext, useContext, useCallback, useEffect, useRef, useState } from 'react'
-import type { CalendarState, NotesState, CalendarEvent } from '@/types'
+import type { CalendarState, NotesState, CalendarEvent, MonthKey, DateString } from '@/types'
 import { storage } from '@/lib/storage'
 
 // ─── Calendar Context ─────────────────────────────────────────────────────────
 
 interface CalendarContextValue {
-  state:          CalendarState
-  goNextMonth:    () => void
-  goPrevMonth:    () => void
-  goToToday:      () => void
-  goToMonth:      (date: Date) => void
-  onDateClick:    (date: Date) => void
-  onDateHover:    (date: Date | null) => void
-  onDragStart:    (date: Date) => void
-  onDragEnter:    (date: Date) => void
-  onDragEnd:      () => void
+  state: CalendarState
+  goNextMonth: () => void
+  goPrevMonth: () => void
+  goToToday: () => void
+  goToMonth: (date: Date) => void
+  onDateClick: (date: Date) => void
+  onDateHover: (date: Date | null) => void
+  onDragStart: (date: Date) => void
+  onDragEnter: (date: Date) => void
+  onDragEnd: () => void
   clearSelection: () => void
-  toggleFocus:    () => void
+  toggleFocus: () => void
   toggleYearView: () => void
-  setViewMode:    (mode: CalendarState['viewMode']) => void
+  setViewMode: (mode: CalendarState['viewMode']) => void
 }
 
 const CalendarContext = createContext<CalendarContextValue | null>(null)
@@ -34,11 +34,11 @@ export function useCalendarContext(): CalendarContextValue {
 // ─── Notes Context ────────────────────────────────────────────────────────────
 
 interface NotesContextValue {
-  notes:           NotesState
-  setMonthMemo:    (key: string, content: string) => void
-  setDateNote:     (key: string, content: string) => void
+  notes: NotesState
+  setMonthMemo: (key: string, content: string) => void
+  setDateNote: (key: string, content: string) => void
   deleteMonthMemo: (key: string) => void
-  deleteDateNote:  (key: string) => void
+  deleteDateNote: (key: string) => void
 }
 
 const NotesContext = createContext<NotesContextValue | null>(null)
@@ -52,10 +52,10 @@ export function useNotesContext(): NotesContextValue {
 // ─── Events Context ───────────────────────────────────────────────────────────
 
 interface EventsContextValue {
-  events:      CalendarEvent[]
-  addEvent:    (event: Omit<CalendarEvent, 'id' | 'createdAt'>) => void
+  events: CalendarEvent[]
+  addEvent: (event: Omit<CalendarEvent, 'id' | 'createdAt'>) => void
   deleteEvent: (id: string) => void
-  editEvent:   (id: string, updates: Partial<Omit<CalendarEvent, 'id' | 'createdAt'>>) => void
+  editEvent: (id: string, updates: Partial<Omit<CalendarEvent, 'id' | 'createdAt'>>) => void
 }
 
 const EventsContext = createContext<EventsContextValue | null>(null)
@@ -73,20 +73,20 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
 
   // ── Calendar State ───────────────────────────────────────────────────────
   const [state, setState] = useState<CalendarState>({
-    currentMonth:   today,
+    currentMonth: today,
     today,
     selectionStart: null,
-    selectionEnd:   null,
-    hoverDate:      null,
+    selectionEnd: null,
+    hoverDate: null,
     selectionPhase: 'idle',
-    isDragging:     false,
-    viewMode:       'single',
-    focusMode:      false,
-    showYearView:   false,
+    isDragging: false,
+    viewMode: 'single',
+    focusMode: false,
+    showYearView: false,
   })
 
   // ── Notes & Events State ─────────────────────────────────────────────────
-  const [notes,  setNotes]  = useState<NotesState>({ monthMemos: {}, dateNotes: {} })
+  const [notes, setNotes] = useState<NotesState>({ monthMemos: {}, dateNotes: {} })
   const [events, setEvents] = useState<CalendarEvent[]>([])
 
   // ── Hydrate from localStorage ────────────────────────────────────────────
@@ -103,19 +103,48 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
 
   // ── Calendar actions ─────────────────────────────────────────────────────
   const goNextMonth = useCallback(() => {
-    setState(s => ({ ...s, currentMonth: new Date(s.currentMonth.getFullYear(), s.currentMonth.getMonth() + 1, 1) }))
+    setState(s => ({
+      ...s,
+      currentMonth: new Date(s.currentMonth.getFullYear(), s.currentMonth.getMonth() + 1, 1),
+      selectionStart: null,
+      selectionEnd: null,
+      selectionPhase: 'idle',
+      hoverDate: null
+    }))
   }, [])
 
   const goPrevMonth = useCallback(() => {
-    setState(s => ({ ...s, currentMonth: new Date(s.currentMonth.getFullYear(), s.currentMonth.getMonth() - 1, 1) }))
+    setState(s => ({
+      ...s,
+      currentMonth: new Date(s.currentMonth.getFullYear(), s.currentMonth.getMonth() - 1, 1),
+      selectionStart: null,
+      selectionEnd: null,
+      selectionPhase: 'idle',
+      hoverDate: null
+    }))
   }, [])
 
   const goToToday = useCallback(() => {
-    setState(s => ({ ...s, currentMonth: today }))
+    setState(s => ({
+      ...s,
+      currentMonth: today,
+      selectionStart: null,
+      selectionEnd: null,
+      selectionPhase: 'idle',
+      hoverDate: null
+    }))
   }, [today])
 
   const goToMonth = useCallback((date: Date) => {
-    setState(s => ({ ...s, currentMonth: date, showYearView: false }))
+    setState(s => ({
+      ...s,
+      currentMonth: date,
+      showYearView: false,
+      selectionStart: null,
+      selectionEnd: null,
+      selectionPhase: 'idle',
+      hoverDate: null
+    }))
   }, [])
 
   const onDateClick = useCallback((date: Date) => {
@@ -173,7 +202,7 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
     setNotes(prev => {
       const next: NotesState = {
         ...prev,
-        monthMemos: { ...prev.monthMemos, [key]: { content, updatedAt: Date.now() } },
+        monthMemos: { ...prev.monthMemos, [key as MonthKey]: { content, updatedAt: Date.now() } },
       }
       storage.notes.set(next)
       return next
@@ -184,7 +213,7 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
     setNotes(prev => {
       const next: NotesState = {
         ...prev,
-        dateNotes: { ...prev.dateNotes, [key]: { content, updatedAt: Date.now() } },
+        dateNotes: { ...prev.dateNotes, [key as DateString]: { content, updatedAt: Date.now() } },
       }
       storage.notes.set(next)
       return next
@@ -194,7 +223,7 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
   const deleteMonthMemo = useCallback((key: string) => {
     setNotes(prev => {
       const memos = { ...prev.monthMemos }
-      delete memos[key]
+      delete memos[key as MonthKey]
       const next = { ...prev, monthMemos: memos }
       storage.notes.set(next)
       return next
@@ -204,7 +233,7 @@ export default function CalendarProvider({ children }: { children: React.ReactNo
   const deleteDateNote = useCallback((key: string) => {
     setNotes(prev => {
       const dNotes = { ...prev.dateNotes }
-      delete dNotes[key]
+      delete dNotes[key as DateString]
       const next = { ...prev, dateNotes: dNotes }
       storage.notes.set(next)
       return next

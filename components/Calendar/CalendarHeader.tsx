@@ -9,7 +9,7 @@ import { MONTH_IMAGES } from '@/lib/constants'
 import { MONTH_ENVIRONMENTS } from '@/lib/backgrounds'
 import { ChevronLeft, ChevronRight, RotateCcw } from 'lucide-react'
 import ClimateAlert from '@/components/UI/ClimateAlert'
-
+import SeasonalParticles from '@/components/UI/SeasonalParticles'
 
 const CalendarHeader = memo(function CalendarHeader() {
   const { state, goNextMonth, goPrevMonth, goToToday } = useCalendarContext()
@@ -45,16 +45,19 @@ const CalendarHeader = memo(function CalendarHeader() {
         </motion.div>
       </AnimatePresence>
 
-      {/* ── Gradient overlay ───────────────────────────────── */}
+      {/* ── Gradient overlay & Particles ───────────────────── */}
       <div className="absolute inset-0 bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+      <SeasonalParticles type={env.particle} />
 
       {/* ── Spiral binding ─────────────────────────────────── */}
-      <div className="absolute top-0 left-0 right-0 flex justify-center gap-[18px] pt-2 z-10">
-        {Array.from({ length: 16 }).map((_, i) => (
+      <div className="absolute top-0 left-0 right-0 flex justify-evenly px-6 pt-2.5 z-10 pointer-events-none">
+        {Array.from({ length: 24 }).map((_, i) => (
           <div
             key={i}
-            className="w-[14px] h-[14px] rounded-full border-[2.5px] border-[color:var(--color-spiral)] bg-[color:var(--color-bg-card)] shadow-sm"
-            style={{ marginTop: i % 2 === 0 ? 0 : 2 }}
+            className="w-[10px] h-[10px] rounded-full border-[2px] border-[color:var(--color-spiral)] bg-[color:var(--color-bg-card)]"
+            style={{ 
+              boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.1), 0 1px 1px rgba(0,0,0,0.05)'
+            }}
           />
         ))}
       </div>
@@ -93,7 +96,7 @@ const CalendarHeader = memo(function CalendarHeader() {
                         env.particle === 'stormLeaves' ? '🌬️' :
                           env.particle === 'rain' ? '🌧️' : '·'}
               </span>
-              <span className="text-[10px] font-semibold text-white/80 tracking-wider">
+              <span className="text-[10px] font-semibold text-white tracking-wider">
                 {env.mood}
               </span>
             </div>
