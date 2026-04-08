@@ -106,10 +106,10 @@ function spawn(W: number, H: number, type: EffectType): Particle {
       // For now, I'll use a random border-focused position for the ripple type globally or check if we are in July.
       // Better: specialized spawn call in useEffect or a check here if we want global change for this type.
       // User said "in july give... mainly on the border".
-      
+
       let rx = rnd(W * 0.1, W * 0.9);
       let ry = rnd(H * 0.1, H * 0.9);
-      
+
       // I'll make them appear anywhere but skew towards edges if we define them for July elsewhere.
       // Let's just make the ripple type high quality and let the useEffect handle the specialized border spawn for July.
       return {
@@ -284,7 +284,7 @@ const BackgroundScene = memo(function BackgroundScene() {
   useEffect(() => {
     const canvas = canvasRef.current; if (!canvas) return
     const resize = () => { canvas.width = window.innerWidth; canvas.height = window.innerHeight }; resize(); window.addEventListener('resize', resize)
-    
+
     particlesRef.current = Array.from({ length: cfg.count }, () => spawn(canvas.width, canvas.height, cfg.type))
 
     // specialized logic for border ripples in July
@@ -351,10 +351,10 @@ const BackgroundScene = memo(function BackgroundScene() {
   }, [month, cfg])
 
   return (
-    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
+    <div className="fixed top-0 left-0 right-0 bottom-[-60px] pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
       <AnimatePresence mode="sync" initial={false}>
         <motion.div key={`bg-${month}`} className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}>
-          <Image src={MONTH_IMAGES[month]} alt="" fill className="object-cover" style={{ filter: 'blur(18px) brightness(0.28) saturate(1.4)', transform: 'scale(1.08)' }} priority />
+          <Image src={MONTH_IMAGES[month]} alt="" fill className="object-cover" style={{ filter: 'blur(18px) brightness(0.28) saturate(1.4)', transform: 'scale(1.1) translateZ(0)' }} priority />
         </motion.div>
       </AnimatePresence>
 
@@ -364,8 +364,8 @@ const BackgroundScene = memo(function BackgroundScene() {
         {(month === 10 || month === 11 || month === 0) && (<motion.div initial={{ opacity: 0 }} animate={{ opacity: 0.15 }} exit={{ opacity: 0 }} className="absolute inset-0 z-[1]" style={{ background: 'linear-gradient(to bottom, rgba(180,200,225,0.2) 0%, transparent 40%, rgba(180,200,225,0.2) 100%)', filter: 'blur(50px)', mixBlendMode: 'lighten' }} />)}
       </AnimatePresence>
 
-      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 85% 80% at 50% 50%, transparent 30%, rgba(0,0,0,0.55) 100%)' }} />
-      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" />
+      <div className="absolute inset-0" style={{ background: 'radial-gradient(ellipse 150% 150% at 50% 50%, transparent 30%, rgba(0,0,0,0.65) 100%)' }} />
+      <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none" style={{ transform: 'translateZ(0)' }} />
     </div>
   )
 })
