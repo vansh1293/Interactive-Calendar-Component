@@ -9,7 +9,7 @@ export default function Home() {
       <BackgroundScene />
 
       <main
-        className="relative min-h-screen flex flex-col items-center justify-start sm:justify-center px-4 sm:px-12 py-10 sm:py-24 overflow-x-hidden"
+        className="relative min-h-screen flex flex-col items-center justify-start sm:justify-center px-4 sm:px-12 pt-8 sm:pt-24 pb-32 sm:pb-24 overflow-x-hidden"
         style={{ zIndex: 1 }}
       >
         {/* Page header */}

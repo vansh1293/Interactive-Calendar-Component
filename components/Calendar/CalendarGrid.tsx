@@ -10,7 +10,7 @@ import DateCell from './DateCell'
 import { DAYS_OF_WEEK } from '@/lib/constants'
 
 const CalendarGrid = memo(function CalendarGrid() {
-  const { state } = useCalendarContext()
+  const { state, onDragEnter, onDragEnd } = useCalendarContext()
   const { currentMonth, today, selectionStart, selectionEnd, hoverDate } = state
 
   const grid = useMemo(() => buildMonthGrid(currentMonth), [currentMonth])
@@ -21,8 +21,30 @@ const CalendarGrid = memo(function CalendarGrid() {
 
   const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`
 
+  // ─── Touch selection proxy ─────────────────────────────────────
+  // Standard mouse events like onMouseEnter don't fire during touch moves.
+  // This proxy uses elementFromPoint to track the finger across cells.
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!state.isDragging) return
+    const touch = e.touches[0]
+    const el = document.elementFromPoint(touch.clientX, touch.clientY)
+    const dateStr = el?.getAttribute('data-date-str')
+    if (dateStr) {
+      // Need to handle the date object correctly from the ISO string
+      onDragEnter(new Date(dateStr))
+    }
+  }
+
+  const handleTouchEnd = () => {
+    if (state.isDragging) onDragEnd()
+  }
+
   return (
-    <div className="flex flex-col gap-1 px-3 sm:px-5 pb-3 sm:pb-3.5 pt-1.5 overflow-hidden">
+    <div 
+      className="flex flex-col gap-1 px-3 sm:px-5 pb-3 sm:pb-3.5 pt-1.5 overflow-hidden"
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
+    >
       {/* Day headers */}
       <div
         role="row"

@@ -124,6 +124,7 @@ const DateCell = memo(function DateCell({
   return (
     <motion.div
       role="gridcell"
+      data-date-str={dateStr}
       tabIndex={isOtherMonth ? -1 : 0}
       aria-label={`${date.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}${isToday ? ', Today' : ''}${isStart ? ', Range Start' : ''}${isEnd ? ', Range End' : ''}${holiday ? `, Holiday: ${holiday.name}` : ''}`}
       aria-selected={isStart || isEnd || isPartOfSelectionRange}
@@ -135,6 +136,10 @@ const DateCell = memo(function DateCell({
       onMouseDown={handleMouseDown}
       onMouseOver={handleMouseEnterDrag}
       onMouseUp={handleMouseUp}
+      onTouchStart={(e) => {
+        if (isOtherMonth) return
+        onDragStart(date)
+      }}
       onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick() } }}
       whileTap={{ scale: isOtherMonth ? 1 : 0.93 }}
     >

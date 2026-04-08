@@ -351,7 +351,7 @@ const BackgroundScene = memo(function BackgroundScene() {
   }, [month, cfg])
 
   return (
-    <div className="fixed inset-0" style={{ zIndex: 0 }} aria-hidden="true">
+    <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }} aria-hidden="true">
       <AnimatePresence mode="sync" initial={false}>
         <motion.div key={`bg-${month}`} className="absolute inset-0" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.8 }}>
           <Image src={MONTH_IMAGES[month]} alt="" fill className="object-cover" style={{ filter: 'blur(18px) brightness(0.28) saturate(1.4)', transform: 'scale(1.08)' }} priority />
