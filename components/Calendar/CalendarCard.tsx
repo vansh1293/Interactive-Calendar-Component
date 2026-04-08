@@ -15,7 +15,7 @@ const CalendarCard = memo(function CalendarCard() {
   const rangeDays = getRangeDayCount(selectionStart, selectionEnd)
 
   return (
-    <div className="relative w-full max-w-5xl mx-auto">
+    <div className="relative w-full max-w-[1330px] mx-auto">
 
       {/* ── Focus mode overlay ───────────────────────────────── */}
       <AnimatePresence>
@@ -75,7 +75,7 @@ const CalendarCard = memo(function CalendarCard() {
 
       {/* ── Main card ─────────────────────────────────────────── */}
       <div
-        className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_300px] rounded-[20px] overflow-hidden"
+        className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_390px] rounded-[24px] overflow-hidden"
         style={{ boxShadow: 'var(--shadow-card)' }}
       >
         {/* Calendar */}
@@ -90,7 +90,7 @@ const CalendarCard = memo(function CalendarCard() {
 
         {/* Notes */}
         <aside
-          className="p-5 flex flex-col gap-4 min-h-[320px] lg:min-h-0 border-t lg:border-t-0 lg:border-l"
+          className="p-7 flex flex-col gap-4 min-h-[320px] lg:min-h-0 border-t lg:border-t-0 lg:border-l"
           style={{
             backgroundColor: 'var(--color-bg-notes)',
             borderColor: 'var(--color-border)',

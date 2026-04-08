@@ -22,7 +22,7 @@ const CalendarGrid = memo(function CalendarGrid() {
   const monthKey = `${currentMonth.getFullYear()}-${currentMonth.getMonth()}`
 
   return (
-    <div className="flex flex-col gap-1 px-4 pb-4 pt-2">
+    <div className="flex flex-col gap-1.5 px-6 pb-6 pt-3">
       {/* Day headers */}
       <div
         role="row"
@@ -54,10 +54,10 @@ const CalendarGrid = memo(function CalendarGrid() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -10 }}
           transition={{ duration: 0.22, ease: 'easeOut' }}
-          className="flex flex-col gap-1"
+          className="flex flex-col gap-1.5"
         >
           {grid.map((week, wi) => (
-            <div key={wi} role="row" className="grid grid-cols-7 gap-1">
+            <div key={wi} role="row" className="grid grid-cols-7 gap-1.5">
               {week.map((date) => {
                 const selState = getSelectionState({
                   date, today, selectionStart, selectionEnd, hoverDate, currentMonth,

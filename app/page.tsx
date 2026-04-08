@@ -13,7 +13,7 @@ export default function Home() {
         style={{ zIndex: 1 }}
       >
         {/* Page header */}
-        <header className="w-full max-w-5xl mb-8">
+        <header className="w-full max-w-[1330px] mb-8">
           <p
             className="text-xs font-semibold tracking-[0.25em] uppercase mb-1"
             style={{ color: 'var(--color-text-muted)' }}

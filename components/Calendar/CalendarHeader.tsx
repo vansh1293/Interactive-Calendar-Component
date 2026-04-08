@@ -23,7 +23,7 @@ const CalendarHeader = memo(function CalendarHeader() {
     currentMonth.getMonth() === today.getMonth()
 
   return (
-    <div className="relative overflow-hidden rounded-t-[20px]" style={{ height: '220px' }}>
+    <div className="relative overflow-hidden rounded-t-[24px]" style={{ height: '286px' }}>
       {/* ── Hero image with true crossfade ─────────────────── */}
       <AnimatePresence mode="sync" initial={false}>
         <motion.div
@@ -60,7 +60,7 @@ const CalendarHeader = memo(function CalendarHeader() {
       </div>
       
       {/* ── Dynamic Climate/Weather Alert ──────────────────── */}
-      <div className="absolute top-12 right-5 z-20">
+      <div className="absolute top-14 right-6 z-20">
         <ClimateAlert month={monthIndex} />
       </div>
 
@@ -74,11 +74,11 @@ const CalendarHeader = memo(function CalendarHeader() {
             exit={{ opacity: 0, x: 10 }}
             transition={{ duration: 0.25 }}
           >
-            <p className="text-white/70 text-xs font-semibold tracking-[0.2em] uppercase">
+            <p className="text-white/70 text-sm font-semibold tracking-[0.2em] uppercase">
               {formatYear(currentMonth)}
             </p>
             <h2
-              className="text-white font-display text-4xl font-bold leading-tight"
+              className="text-white font-display text-5xl font-bold leading-tight"
               style={{ fontFamily: 'var(--font-playfair)' }}
             >
               {formatMonthName(currentMonth)}
